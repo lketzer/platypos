@@ -1,0 +1,2 @@
+a,core_mass,fenv,metallicity
+0.1083,5.0,10.665471461600776,solarZ

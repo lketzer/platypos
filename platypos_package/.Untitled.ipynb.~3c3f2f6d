@@ -1,0 +1,394 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import astropy.units as u\n",
+    "from astropy import constants as const\n",
+    "\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import os\n",
+    "import matplotlib\n",
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib.style\n",
+    "import matplotlib as mpl\n",
+    "import matplotlib.ticker as ticker\n",
+    "import math\n",
+    "from cycler import cycler"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from Mass_evolution_function import mass_planet_RK4_forward_Ot14"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mass_planet_RK4_forward_Ot14()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/latex": [
+       "$0.83020952 \\; \\mathrm{\\frac{1}{cm^{3}}}$"
+      ],
+      "text/plain": [
+       "<Quantity 0.83020952 1 / cm3>"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "26.39*const.M_earth.cgs.value/(4/3*np.pi*(5.59*const.R_earth.cgs)**3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "TypeError",
+     "evalue": "mass_loss_rate_forward_Ot20() missing 7 required positional arguments: 't_', 'epsilon', 'K_on', 'beta_on', 'planet_object', 'radius_at_t', and 'track_dict'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-26-4dd480eb0c67>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mmass_loss_rate_forward_Ot20\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[0;31mTypeError\u001b[0m: mass_loss_rate_forward_Ot20() missing 7 required positional arguments: 't_', 'epsilon', 'K_on', 'beta_on', 'planet_object', 'radius_at_t', and 'track_dict'"
+     ]
+    }
+   ],
+   "source": [
+    "mass_loss_rate_forward_Ot20()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 165,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/latex": [
+       "$5.495203 \\; \\mathrm{\\frac{g}{cm^{3}}}$"
+      ],
+      "text/plain": [
+       "<Quantity 5.495203 g / cm3>"
+      ]
+     },
+     "execution_count": 165,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "1*const.M_earth.cgs/(4/3*np.pi*(1*const.R_earth.cgs)**3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 166,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.23873241463784303"
+      ]
+     },
+     "execution_count": 166,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "1/(4/3*np.pi*(1)**3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1.6743786508994974e-28"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "\n",
+    "ein_cm_in_RE = 1/const.R_earth.cgs.value\n",
+    "ein_cm_in_RE\n",
+    "\n",
+    "ein_g_in_ME = 1/const.M_earth.cgs.value\n",
+    "ein_g_in_ME"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.1433644886868798"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "3.3*(ein_g_in_ME/(ein_cm_in_RE)**3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "5.831791854389194"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mass_planet_Ot19(2.15)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def mass_planet_Ot19(R_p):\n",
+    "    \"\"\"\n",
+    "    I only use the volatile rich regime! This means the radius needs to be greater than ~2.115 R_earth (radius with density > 3.3)\n",
+    "    \"\"\"\n",
+    "    M_earth = const.M_earth.cgs.value\n",
+    "    R_earth = const.R_earth.cgs.value\n",
+    "    \n",
+    "    \n",
+    "    if (type(R_p)==int) or (type(R_p)==float) or (type(R_p)==np.float64): # if R is single value\n",
+    "        M_p_volatile = 1.74*(R_p)**1.58 # if rho < 3.3 g/cm^3\n",
+    "        rho_volatile = M_p_volatile*M_earth/(4/3*np.pi*(R_p*R_earth)**3)\n",
+    "        if (rho_volatile >= 3.3):\n",
+    "            raise Exception(\"Planet with this radius is too small and likely rocky; use LoFo14 models instead.\")\n",
+    "        else:\n",
+    "            if (M_p_volatile >= 120):\n",
+    "                raise Exception(\"Planet too massive. M-R relation only valid for <120 M_earth.\")\n",
+    "            else:\n",
+    "                return M_p_volatile\n",
+    "            \n",
+    "    elif len(R_p) > 1: # if R is array\n",
+    "        Ms = []\n",
+    "        for i in range(len(R_p)):\n",
+    "            M_p_volatile_i = 1.74*(R_p[i])**1.58 # if rho < 3.3 g/cm^3\n",
+    "            rho_volatile_i = M_p_volatile_i*M_earth/(4/3*np.pi*(R_p[i]*R_earth)**3)\n",
+    "            if (rho_volatile_i >= 3.3) or (M_p_volatile_i >= 120):\n",
+    "                M_i = np.nan\n",
+    "            else:\n",
+    "                M_i = M_p_volatile_i\n",
+    "            Ms.append(M_i)\n",
+    "        Ms = np.array(Ms)\n",
+    "        return Ms"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "    def radius_planet_Ot19(M_p):\n",
+    "        \"\"\"\n",
+    "        I only use the volatile rich regime! This means the mass needs \n",
+    "        to be bewteen ~ and 120 M_earth\n",
+    "        \"\"\"\n",
+    "        M_earth = const.M_earth.cgs.value\n",
+    "        R_earth = const.R_earth.cgs.value\n",
+    "\n",
+    "        if (type(M_p)==int)or(type(M_p)==float) or (type(M_p)==np.float64): # if M is single value\n",
+    "            R_p_volatile = 0.7*M_p**0.63 # if rho < 3.3 g/cm^3\n",
+    "            rho_volatile = M_p*M_earth/(4/3*np.pi*(R_p_volatile*R_earth)**3)\n",
+    "            if (rho_volatile >= 3.3):\n",
+    "                raise Exception(\"Planet with this mass/radius is too small and likely rocky; use LoFo14 models instead.\")\n",
+    "            else:\n",
+    "                if (M_p_volatile >= 120):\n",
+    "                    raise Exception(\"Planet too massive. M-R relation only valid for <120 M_earth.\")\n",
+    "                else:\n",
+    "                    return M_p_volatile\n",
+    "\n",
+    "        elif len(M_p) > 1: # if M is array\n",
+    "            Rs = []\n",
+    "            for i in range(len(M_p)):\n",
+    "                R_p_volatile_i = 0.7*M_p[i]**0.63 # if rho < 3.3 g/cm^3\n",
+    "                rho_volatile_i = M_p[i]*M_earth/(4/3*np.pi*(R_p_volatile_i*R_earth)**3)\n",
+    "                if (rho_volatile_i >= 3.3) or (M_p[i] >= 120):\n",
+    "                    R_i = np.nan\n",
+    "                else:\n",
+    "                    R_i = R_p_volatile_i\n",
+    "                Rs.append(R_i)\n",
+    "            Rs = np.array(Rs)\n",
+    "            return Rs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "Exception",
+     "evalue": "Planet with this mass/radius is too small and likely rocky; use LoFo14 models instead.",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mException\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-14-05eaaf41372c>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mradius_planet_Ot19\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[0;32m<ipython-input-13-04f1196bf08e>\u001b[0m in \u001b[0;36mradius_planet_Ot19\u001b[0;34m(M_p)\u001b[0m\n\u001b[1;32m     11\u001b[0m         \u001b[0mrho_volatile\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mM_p\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0mM_earth\u001b[0m\u001b[0;34m/\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m4\u001b[0m\u001b[0;34m/\u001b[0m\u001b[0;36m3\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpi\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mR_p_volatile\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0mR_earth\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m**\u001b[0m\u001b[0;36m3\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     12\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0;34m(\u001b[0m\u001b[0mrho_volatile\u001b[0m \u001b[0;34m>=\u001b[0m \u001b[0;36m3.3\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 13\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0mException\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Planet with this mass/radius is too small and likely rocky; use LoFo14 models instead.\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     14\u001b[0m         \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     15\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0;34m(\u001b[0m\u001b[0mM_p_volatile\u001b[0m \u001b[0;34m>=\u001b[0m \u001b[0;36m120\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mException\u001b[0m: Planet with this mass/radius is too small and likely rocky; use LoFo14 models instead."
+     ]
+    }
+   ],
+   "source": [
+    "radius_planet_Ot19(1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 160,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "R = np.arange(1,25, 0.001)\n",
+    "M = np.arange(1,130, 0.001)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 161,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Mot = mass_planet_Ot19(R)\n",
+    "Rot = radius_planet_Ot19(M)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 163,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "5.683648716910445"
+      ]
+     },
+     "execution_count": 163,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Mot[~np.isnan(Mot)][0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 162,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/work2/lketzer/anaconda3/envs/lconda/lib/python3.7/site-packages/IPython/core/pylabtools.py:128: UserWarning: Creating legend with loc=\"best\" can be slow with large amounts of data.\n",
+      "  fig.canvas.print_figure(bytes_io, **kw)\n"
+     ]
+    },
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAX8AAAD8CAYAAACfF6SlAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4xLjAsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+17YcXAAAgAElEQVR4nO3dd1yVdf/H8dcXZIgDFReKCoqboYjbXJV7pNadWZmVmpXN+y5xlWW50mxYmVaWlo1b3FszR2opFoK4UVREZSkiQ8b5/v7Au5+ZA+RwrjM+z8ejx6MzrnPeXw+8OVxc53MprTVCCCEci5PRAYQQQlielL8QQjggKX8hhHBAUv5CCOGApPyFEMIBSfkLIYQDKmV0AIDKlStrX19fo2MIIYRN2bdvX7LWusrdbGsV5e/r60tERITRMYQQwqYopU7d7bay20cIIRyQlL8QQjggKX8hhHBAVrHP/2Zyc3OJj48nOzvb6ChWyd3dHR8fH1xcXIyOIoSwQVZb/vHx8ZQrVw5fX1+UUkbHsSpaa1JSUoiPj8fPz8/oOEIIG2S1u32ys7Px8vKS4r8JpRReXl7yW5EQ4q5ZbfkDUvy3If82BjqwFK6mG51C2DitNSsiz5KVk2/I81t1+duySZMmMXPmTKNjCHOL/QWWPAk7PzI6ibBhZ1IzefzLPbz0QyT/3XfGkAxWu8/f2mit0Vrj5CQ/Lx1WZiosfxYqN4AOrxidRtigfJPmm11xvLfhCM5OinceCGBIq9qGZJEmu424uDgaN27Mc889R0hICIsWLSIwMJCAgADGjBnz1/3Wr19PSEgIwcHB3Hvvvf94nPnz59OzZ09iYmIICQn56/pjx47RokULi6xFFJPWsPplyEiGgfPB1cPoRMLGHLuQzkNzd/H26oO0rluJja905LE2dXByMmYXrk28839rVQwHEy6b9TGb1CjPm32b3vF+R44cYcGCBUyYMIE2bdqwb98+KlasSLdu3Vi+fDnt27dnxIgRbN++HT8/P1JTU/+2/Zw5c9i4cSPLly/Hzc0NT09PIiMjadasGQsWLGDYsGFmXZcoIfu/h4Mr4L5JUKOZ0WmEDcnNNzF3aywfbzlOGTdnPni4Gf2b1TD873Y2Uf5GqlOnDm3atGHFihV07tyZKlUKZig9+uijbN++HWdnZzp27PjXIZeVKlX6a9tFixbh4+PD8uXL/zoef/jw4SxYsID333+fH3/8kT179lh+UaJoUk/C2tegTnto96LRaYQNiY5P47Ul+zl8Pp2+wTV4s28TKpd1MzoWYCPlX5h36CWlTJkyQME+/5vRWt/yJ3hAQACRkZF/Ox5/0KBBvPXWW3Tt2pUWLVrg5eVVMsGFeeTnwbJnQDnDgM/BydnoRMIGZOfmM3vzUeZvP0GVcm7MHxrK/U2qGR3rb2SffyG1bt2abdu2kZycTH5+Pt9//z2dOnWibdu2bNu2jZMnTwL8bbdP8+bN+fzzz+nXrx8JCQlAwSdzu3fvzrPPPsuTTz5pyFpEEfz6Ppz5HXrPggq1jE4jbMBvJ1Lo8cF2Pt92godb1mLjK52srvhByr/QvL29mTp1Kl26dCE4OJiQkBD69+9PlSpVmDdvHgMHDiQ4OJiHH374b9t16NCBmTNn0rt3b5KTk4GCXUZKKbp162bEUkRhxe+DrdMg8CEIesjoNMLKpWfnMn5ZNIPn/YZJw+LhrZk6MAjP0tY5gkXdaneGJYWGhuob5/kfOnSIxo0bG5SoZM2cOZO0tDQmT55crMex538jw129Ap/fA/m5MOpXKF3B6ETCiv1yOJFxy6K5cDmbp9r78Wq3Bni4lvxedaXUPq116N1saxP7/O3JgAEDiI2NZcuWLUZHEbezYVzBH3qHrZbiF7eUmpHD26tiWB6ZQP2qZfn02XY0r13R6FiFIuVvYcuWLTM6griTQ6vhj2+g/cvg28HoNMIKaa1ZHXWOSStjuJydy0v31ue5LvVwK2U7BwRI+QtxvfTzsPIFqB4EXcYbnUZYofNp2UxYfoDNhy4Q7OPJ9Adb06h6eaNjFZmUvxD/ozWseB5yM2HQF1DK1ehEwoporflh7xmmrDlErsnE+F6NeaqDH84GfUK3uKT8hfifPfPh+GboNROqNDQ6jbAip1IyCAuPZveJFNrUrcS0gUH4Vi5jdKxiMbT8lVJ9gb7+/v5GxhACEg/DpolQvxu0HG50GmEl8k2aBTtPMnPjEVycnJgyIJDBLWsZNo/HnAw9zl9rvUprPdLT09PIGMUWFxdHQEDAHe+zePHivy5HRETw4osFowK+/vprRo8eXaIZxW3kXYWlw8G1LPT/BORcCQI4cj6dgZ/t4p01h2hfrzIbX+3IkNa17aL4QXb7WMz/yn/IkCEAhIaGEhp6V4fnCnPb8g6cj4ZHfoCyVY1OIwyWk2fi063H+eSX45Rzd+GjR5rTN8jb8EFs5iaf8L2FMWPG8Omnn/51edKkScyaNYvXXnuNgIAAAgMD+fHHH/+xXVxcHPfccw8hISGEhISwa9cuAMLCwtixYwfNmjVj9uzZbN26lT59+vxj+6SkJAYNGkTLli1p2bIlO3fuLLlFCji5HXZ9DC2ehIY9jU4jDBZ55hJ9P/6VDzYfo1egN5tf7US/YOMncJYE23jnvy6s4J2ZOVUPhJ7Tbnnz4MGDefnll3nuuecA+OmnnxgzZgzr169n//79JCcn07JlSzp27Pi37apWrcqmTZtwd3fn2LFjPPLII0RERDBt2jRmzpzJ6tWrAdi6detNn/ell17ilVdeoUOHDpw+fZru3btz6NAh86xZ/F3WRVg2CrzqQfd3jU4jDJSVk8/7m47w5a8nqVrOnS+fCOXextY3j8ecbKP8DdC8eXMSExNJSEggKSmJihUrEhkZySOPPIKzszPVqlWjU6dO7N27l6CgoL+2y83NZfTo0URGRuLs7MzRo0eL9LybN2/m4MGDf12+fPky6enplCtXzmxrE1w7OcurcOUCPL0JXG37yA1x93bFJhMWHs3p1EyGtK5NWM9GlHe3znk85mQb5X+bd+gl6cEHH2TJkiWcP3+ewYMHExsbe8dtZs+eTbVq1di/fz8mkwl3d/ciPafJZGL37t2ULl36bmOLwoj6CWKWQteJUDPkzvcXdudydi5T1x7m+z2nqePlwfcj2tC2nuOMWJd9/rcxePBgfvjhB5YsWcKDDz5Ix44d+fHHH8nPzycpKYnt27fTqlWrv22TlpaGt7c3Tk5OLFq0iPz8fADKlStHenr6HZ+zW7duzJkz56/LkZGR5l2UgIunYO1/oHZbORevg9p88AL3v7+NH/ee5pmOdVn/UkeHKn6Q8r+tpk2bkp6eTs2aNfH29mbAgAEEBQURHBxM165dmTFjBtWrV//bNs899xzffPMNbdq04ejRo3+dDCYoKIhSpUoRHBzM7Nmzb/mcH330EREREQQFBdGkSRPmzp1bomt0OKb8gpOzaC0nZ3FAKVeu8uL3fzJ8YQQVPVxZ/nx7xvZqTGlXx/s6kJHONkz+je7C9pmwZXJB8QcPNjqNsBCtNSv3JzBpZQxXrubxQtf6jOpUD9dStv3+V0Y6C1EYZ/+ArVOh6UAIevjO9xd2IeFSFhOWH2DL4USa1arAjAeDaFBNDqCQ8heOIScDlo6AstWgz/vyKV4HYDJpvt97mqlrD5Nv0kzs04Rh7XxtdhCbuUn5C8ewcQKkxMITK6G0bZxsQ9y9k8kZhIVH8fvJVNr7ezF1QBC1vTyMjmVVrLr8tdZ2+ck6c7CGv9XYjCPrIOIraPcC+HW88/2FzcrLN/HVzpPM2ngU11JOTB8UyL9Ca0mP3ITVlr+7uzspKSl4eXnJC3cDrTUpKSlF/gyBQ7qSCCtGQ7XAgmP6hd06dO4yY8KjiIpP4/4m1XjngQCqlZfvkVux2vL38fEhPj6epKQko6NYJXd3d3x8fIyOYd3+d3KWnCswaD6UcjM6kSgBV/Py+WTLcT7dGksFDxc+GRJCr8Dq8qbxDqy2/F1cXPDz8zM6hrBlEV/CsY3QcwZUlUNi7dEfpy8yZkkUxxKvMLB5TSb2aULFMnIGtsKw2vIXoliSjsKGCVDvXmg10ug0wswyc/KYueEoC3adxLu8OwuebEmXhjKOuyik/IXdyb2aQcyyYTRzKQ0PfCqHddqZnceTCVsaxZnULB5vU4fXezSknAMMYjM3KX9hdz5d/QRful5m6X0T8C9X/c4bCJuQlpXLlDWH+DHiDH6Vy/DjyDa0rutY83jMScpf2JWIyK/5Mv0wA9y88W/xtNFxhJlsiDnPxOUHSMnI4dnO9Xjp3vq4uzjePB5zkvIXdiM9LZ5xf8zEB8WYvt8ZHUeYQVL6VSatjGFN9Dkae5fnyydaEuhj2+f8thZS/sJuvLv6cRKdYGHLCXjIuXhtmtaaZX+e5e3VB8m8ms9r3RsysmNdXJxtexCbNZHyF3Zh7bY3WZOXzHMVgglqKkPbbNnZS1mMXxbN1iNJhNQuGMTmX1UGsZmblL+weecS9vHOiXCClSsjen9pdBxxl0wmzXe/n2LausNoYFLfJjzeVgaxlRQpf2HT8vNyGLfxGfKBqffOoZSLfJzfFsUmXWFseDR74lK5p35lpgwIpFYlGcRWkqT8hU37Zt0oItRV3q7Vm1q12hkdRxRRXr6JeTtO8MHmY7iXcuK9B4N4sIWPjGawACl/YbMOHV7Oxyl7uN+5Ig90mWp0HFFEMQlpjAmP4sDZy/RoWp23H2hK1XLym5ulSPkLm5SVmUrYrjeoBLzRfyHKSY4CsRXZufl8vOUYc7edoKKHK589GkLPQG+jYzkcKX9hk2avepwTzprPmz5PhYoyANBW7DuVyutLoohNymBQiA8T+zSmgocMYjOClL+wOTt+/5Dvs0/zmIcf7UKfNTqOKISMq3m8t+EI3+yOo4Znab55qhWdGlQxOpZDk/IXNiU15RgTY+ZTXznzct9FRscRhbD9aBJjl0aTkJbFE219ea17Q8q4SfUYTV4BYTO0ycSba57gshPM6zANN3f5mL81u5SZwztrDrFkXzx1q5Thv8+0JdS3ktGxxDVS/sJmhG/+N1t1Oq9VbU8D/55GxxG3sS76HBNXxHAxM4fnu9Tjha4yiM3aSPkLmxAXt40ZZzfRxsmDx7p/YnQccQuJ6dm8uSKGdQfO07RGeb55qiVNa8hvaNZIyl9YvdzcTMb+8hKuwDs9vsTJWb5srY3WmiX74nlnzSGycvN5vUdDRtwjg9ismXwXCas3d9UwDjjlM6veI1SrFmh0HHGDM6mZjFsWzY5jybT0rci0QUHUq1LW6FjiDqT8hVX7M2oRX1w+SH/X6nTrMN7oOOI6JpNm4e44Zmw4ggIm92/Ko63r4CSD2GyClL+wWlfSExgbMYMaKMb2+9boOOI6xxPTGRMezb5TF+nUoArvDgjAp6IMYrMlZi9/pVRdYDzgqbV+0NyPLxzH1FWPc85J803oOMqUlXPxWoPcfBPztp/gw83H8HBz5v1/BTOgeU0ZxGaDCvXXGKXUV0qpRKXUgRuu76GUOqKUOq6UCgPQWp/QWsvJU0WxbNgxmZW5iYz0DKRZwBCj4wjgwNk0+s/ZyXsbjnB/k2pseqUTA0NkAqetKuw7/6+BOcDC/12hlHIGPgHuB+KBvUqplVrrg+YOKRzL+fORvH38BwJxZWQfOTmL0bJz8/nw52PM236CSmVcmftYC3oEyG9itq5Q5a+13q6U8r3h6lbAca31CQCl1A9Af0DKX9w1U34eEzaMIBfF1K4f4eIi+5GNtDculTFLojiRnMHDobUY16sxnh4uRscSZlCcff41gTPXXY4HWiulvIB3geZKqbFa65sOWldKjQRGAtSuXbsYMYQ9WbT+WX4nm0m1elCnzj1Gx3FYV67mMWP9YRbuPoVPxdJ8+3RrOtSvbHQsYUbFKf+b7ejTWusUYNSdNtZazwPmAYSGhupi5BB24sjR1XyYtJuuzp4M7DrD6DgO65cjiYxfGs25y9k81d6P/3RvgIerHBhob4rzisYDta677AMkFC+OcFTZWRcJ+3UcnsCkfnJyFiNczMhh8uqDLP3zLP5Vy7JkVDta1KlodCxRQopT/nuB+kopP+AsMBiQwzLEXflw1VCOO2vmNhlFxUr1jI7jULTWrI0+z5srD3ApM5cXu/rzfFd/3ErJIDZ7VqjyV0p9D3QGKiul4oE3tdZfKqVGAxsAZ+ArrXVMiSUVdmvX3jl8mxXHkNJ1aN9ytNFxHEri5WwmLD/AxoMXCKzpyaKnW9PYu7zRsYQFFPZon0ducf1aYK1ZEwmHcjE1lvHRc/HHiVfk5CwWo7XmvxHxTF5zkJw8E2N7NuLpDn6UkkFsDsPQv+IopfoCff39/Y2MIQyiTSbeWjOUNCeY224K7qVl/7IlnE7JZOyyKHYeT6GVXyWmDwrCr3IZo2MJCzO0/LXWq4BVoaGhI4zMIYyxfMsYfjZd5t+V29CwQR+j49i9fJPm611xzNxwBGcnxTsPBDCkVW0ZxOag5PgtYYjTp39l6pl1tHIqzdCec42OY/eOXUjn9fAo/jx9iS4Nq/DugEBqVChtdCxhICl/YXF5uVmM/fkFSgHvdpsvJ2cpQTl5JuZui2XOluOUcXPmg4eb0b9ZDZnHI6T8heXNW/0UUU55vOf3L6p7NzM6jt2Kir/E60uiOHw+nb7BNXizbxMql3UzOpawElL+wqIiDyxmXlo0fV2r0qPjG0bHsUtZOfl8sPko83ecoEo5N+YPDeX+JtWMjiWsjJS/sJiMK+cZu2cq1VGM6/ud0XHs0m8nUggLjyIuJZNHWtVibK/GlHeXQWzin+RQT2Ex01c+RoKTZkHz1ylbztvoOHYlPTuXaesO893vp6ldyYPFw1vTzl8GsYlbk0M9hUVs/nUKy3IvMKJ8E0KChxodx65sOXyB8csOcOFyNsM7+PHvbg0p7SqjGcTtyW4fUeISL0Qz6dhimlKKZ/t+bXQcu5GakcPbq2JYHplAg2pl+fTRdjSvLR+UE4Uj5S9KlCk/jwnrnyYHmNblQzk5ixlorVkVdY5JK2NIz87l5fvq81xnf1xLyWgGUXhS/qJELd4wmt1kMbHm/fj6djI6js07n1YwiG3zoQsE16rAjEFBNKxezuhYwgZJ+YsSc/T4OmYn/kpnp/I8dN8so+PYNK01P+w9w5Q1h8g1mZjQuzFPtvfDWUYziLsk5S9KxNXsNMJ2hFEWmNT7Gzk5SzGcSskgLDya3SdSaFvXi2mDAqnjJYPYRPFI+YsS8dGqoRxzMvFJoxF4edU3Oo5NyjdpFuw8ycyNR3BxcmLqwEAGt6wloxmEWUj5C7P7bd9cFmae4GH3WnRs/ZLRcWzSkfMFg9j2n7nEfY2r8s4DgVT3dDc6lrAj8iEvYVZpl+IYv38Ofjjx777fGh3H5uTkmfh063E++eU45d1d+PiR5vQJ8pZ3+8Ls5ENewmy0ycRbqx4j1Qk+bvM2pT0qGR3JpkSeucSYJVEcuZDOA81q8EbfplQq42p0LGGnZLePMJuVv4xjkymNl71a0qTRA0bHsRlZOfnM2niEr3aepFp5d74aFkrXRjKITZQsKX9hFmfO7GbK6dWEKneG9fzc6Dg2Y1dsMmHh0ZxOzeTR1rUJ69mIcjKITViAlL8otrzcbMZtfh5nYEq3z3EuJbsq7uRydi5T1x7i+z1n8PXy4IeRbWhT18voWMKBSPmLYvti7XAinXKZ7jsI7xotjI5j9TYfvMD45dEkpV/lmY51efm+BjKITViclL8oluiYn5h7MZJeLpXp1ekto+NYteQrV3lr1UFW7U+gUfVyzB8aSpBPBaNjCQcl5S/uWuaVRMJ+n0xVYHyfRUbHsVpaa1ZEJvDWqhgyrubz7/sb8EynejKITRhKyl/ctRmrHuOMk+bLZq9S3rOW0XGsUsKlLCYsP8CWw4k0r10wiK1+NRnEJownH/ISd+XnXdMJzznH0+Ua0bLZU0bHsTomk2bxntNMW3eYfJPmjT5NeKKdrwxiE1ZDaa2NzkBoaKiOiIgwOoYopKTEGAaueRhvSvHdkJ24uMmQseudTM4gLDyK30+m0t7fi6kDgqjtJecxEOanlNqntQ69m21lt48oEm0yMXHdU2QD0zq/L8V/nbx8E1/+epL3Nx3FtZQTMwYF8VCoj4xmEFZJyl8UyfcbX2AnmYyv0YW6fl2NjmM1DiZcZkx4FNFn0+jWpBqTHwigWnkZxCasl5S/KLTY2E28f24b9ziX5eH7PzQ6jlW4mpfPnC3H+WxrLBU8XPhkSAi9AqvLu31h9aT8RaHkXE0nbPt/KAO83etrOTkLsO/URcaER3E88QoDQ2oysXcTKsogNmEjpPxFocxZNZTDTiY+bvgUlSs3MjqOoTJz8nhvwxG+3hWHd3l3FjzZki4NqxodS4gikfIXd7Tnzy/4+soxHnL3oXObV42OY6hfjyUTtjSK+ItZDG1bh9d7NKKsm3wbCdsjX7XittLSTjPuzw+og+I//Rz35CxpWbm8u+YgP0XEU7dyGX56pi2t/OR8BcJ2SfmLW9ImE++seowUJ/i29SQ8PCobHckQG2LOM3H5AVIycni2cz1eurc+7i4yiE3YNil/cUurt01kff5FXqwUQtPGg4yOY3FJ6VeZtDKGNdHnaOJdnq+GtSSgpqfRsYQwCxnvIG7q7Nk9TIlbQYhy46leXxgdx6K01iz94yxvrz5IVk4+r3VvyMiOdXFxliOchP2Qc/iKf8jPy2HcpmcBmHL/Zw51cpazl7IYtzSabUeTaFGnItMHBeFftazRsYQwO9ntI/5hwdoR/KFymFLnAWrWbGV0HIswmTTf/n6K6esOo4G3+jXl8TZ1cJJBbMJOSfmLv4k5FM4nqfvoUaoSfTq9bXQci4hNukJYeBR74y5yT/3KTBkQSK1KMohN2Dcpf/GXzMxkwnZPwguY0Pdbu/8Ub26+ifk7TvDB5mOUdnFm5kPBDAqpKaMZhEOQ8hd/mbXyMU45ab4IfhlPz9pGxylRB86mMSY8ipiEy/QMqM5b/ZtStZwMYhOOQ8pfALDtt1n8dPUsT5atT6vmw42OU2Kyc/P5eMsx5m47QUUPVz57NISegd5GxxLC4qT8BcnJh3nj0AIa4czovguNjlNiIuJSeT08ihNJGTzYwocJvRtTwcNxjmQS4npS/g5Om0y8uXYYGcC0jjNxdbO/88tmXC0YxPbN7jhqeJZm4VOt6NigitGxhDCUlL+D+2nTS2zXGYRV70i9evcbHcfsth1NYtzSaBLSsniirS+vdW9IGRnEJoSUvyM7cXILMxN+ob1TGYZ0n2N0HLO6lJnD5NWHCP8jnnpVyvDfZ9oS6iuD2IT4Hyl/B5V7NYOwra9SGpjc8yu7OqxzXfQ5Jq6I4WJmDqO7+DO6q78MYhPiBlL+DuqT1U9wyCmfD+o/TpWqTY2OYxaJl7N5Y0UM62PO07RGeb55qiVNa8ggNiFuRsrfAUVELuCr9MMMcqvBve3GGB2n2LTWLNkXz+TVB8nOMzGmRyNG3ONHKRnEJsQtyVRPB3M57Qzj/phFLRSv97X9k7OcSc1k3LJodhxLppVvJaYOCqReFRnEJsSdyFRPBzNl9eMkOsHClhPwKGu7553NN2kW7Y5jxoYjKGBy/6Y82loGsQlRWLLbx4Gs3foma/JSeL5iM4KaPmx0nLt2PDGdMeHR7Dt1kU4NqjBlYCA1K5Q2OpYQNkXK30GcS4jgnZPhNFOuDLfRk7Pk5pv4fFssH/18HA83Z97/VzADmssgNiHuhpS/A8jPy2HcxlGYgCn3fkIpF9sbYHbgbBqvLYni0LnL9A7yZlLfplQp52Z0LCFslpS/A/hm3TNEqKu8U7sPtWq1NTpOkWTn5vPB5mPM33GCSmVc+fzxFnRvWt3oWELYPCl/O3fw8HI+TtnL/c4V6dd5itFximTPyVTCwqM4kZzBw6G1GNerMZ4eLkbHEsIuSPnbsazMVMJ2vUEl4M0HFtnMp3jTs3OZsf4Ii347Ra1KpflueGva+1c2OpYQdkXK3469v+oxTjpr5gWMxrOCr9FxCuWXI4mMXxrNucvZPNXej/90b4CHq3yZCmFu8l1lp7b//iE/ZJ9hqEdd2rYYZXScO7qYkcPk1QdZ+udZ6lctS/iz7QipXdHoWELYLSl/O5SSfJQ3YuZTXznzopWfnEVrzZroc7y5Ioa0rFxe7OrP8139cSslg9iEKElS/nZGm0xMWjuMdCeY12Eabu7WO9jswuVsJi4/wMaDFwjy8eTb4a1p7F3e6FhCOAQpfzuzZPOrbNXpvF61PQ38exod56a01vwUcYZ31hwiJ8/EuF6NeKq9DGITwpKk/O1IXNw23ju7mbZOHjza/ROj49zU6ZRMwpZGsSs2hdZ+lZg+KAjfymWMjiWEw5HytxO5uZmM/eUlXIF3enyFk7N1vbT5Js3Xu+KYueEIzk6KdwcE8EjL2jKITQiDWFdDiLs2d9UwDjjlM7veo1StFmB0nL85eiGd15dEEXnmEl0bVeXdAQF4e8ogNiGMJOVvB/7Yv5AvLh/kAdfq3NdhrNFx/pKTZ2Lutlg+3nKMsm6l+HBwM/oF15BBbEJYASl/G3clPYFx+96jBoqwftZzcpb9Zy4xJjyKw+fT6Rdcgzf7NsGrrAxiE8JayJm8bNzUlY9x3knzdeg4ypQ1fuBZVk4+szcf5YsdJ6hazp0vhoZyX5NqRscSQtxAzuRlw9Zvf4uVeUk86xlIs4AhRsdhd2wKY5dGEZeSySOtajO2VyPKu8sgNiGskez2sVHnz//J5NifCMKVkX0WGJrlcnYu09YdZvHvp6nj5cHiEa1pV08GsQlhzaT8bZApP48J60eSi2LqvR8benKWLYcvMG7pARLTsxlxjx+v3t+Q0q4ymkEIayflb4MWrRvF7yqbt316Urt2B0MypFy5yturD7IiMoGG1cox9/EWNKtVwZAsQoiik/K3MUeOrubD5N+419mTB7pOt/jza61ZFXWOSStjSM/O5eX76vNcZ39cS8loBiFsiZS/DcnOukjYr+OoALzZb6HFT85yLi2LicsPsPlQIsG1KjBjUBANq5ezaAYhhMxdbcYAAA90SURBVHlI+duQD1YN5biz5vMmo6hYqZ7Fntdk0vyw9wxT1x4i12RiQu/GPNneD2cZzSCEzZLytxE7987hu6w4HivtS7uWoy32vHHJGYQtjeK3E6m0revFtEGB1PGSQWxC2DopfxtwMTWWCdFz8ceJlyx0cpZ8k+arX08ya9MRXJycmDYwkIdb1pLRDELYCSl/K6dNJiatGUqaE8xtNwX30iV/asMj59N5fcl+9sencV/jarzzQADVPY07nFQIYX5S/lZu2ZbX2WK6zH+qtKVhgz4l+lw5eSY++eU4n249Tnl3Fz5+pDl9grzl3b4QdkjK34qdPv0r086sp7VTaR7v8VmJPtefpy8yJjyKoxeuMKB5TSb2aUKlMq4l+pxCCONI+Vup3NxMxv78Ai7AO93nl9jJWTJz8pi18Shf7TxJ9fLufDUslK6NZBCbEPZOyt9KzV/9NFFOecys+zDVqzcrkefYdTyZsKXRnE7N5LE2tRnToxHlZBCbEA5Byt8KRR5YzOdp0fRzrUr3eyaa/fHTsnKZuvYQP+w9g6+XBz+MbEObul5mfx4hhPWS8rcyGVfOM3bPVLxRjO37ndkff9PBC0xYHk1S+lWe6VSXV+5rgLuLDGITwtFI+VuZaSsfI8FJ83VIGGXLeZvtcZOvXGXSyhhWR52jUfVyzB8aSpCPDGITwlFJ+VuRTb9OYXnuBUZ6NqV50GNmeUytNcsjz/LWqoNkXs3n3/c3YFTnerg4yyA2IRyZlL+VuHAhireOfUcArowy08lZEi5lMX5ZNL8cSaJ57YJBbPWrySA2IYSUv1Uw5ecxcf1wclBM7fIBLi4exXs8k+a7PaeZvu4w+SbNG32a8EQ7XxnEJoT4i5S/Fbi06wNSrqbxmm8vfH07FeuxTiZnMCY8ij0nU+ngX5mpAwOpVal4P0yEEPZHyt9oF2KotHU6P9TrSqn7Zt31w+Tlm/ji15PM3nQUt1JOzHgwiIda+MhoBiHETUn5Gyk3G8KHg3sFXPp/And5cpaDCZcZEx5F9Nk0ujetxuT+AVQtL4PYhBC3JuVvpJ/fhsSD8OgSKFO5yJtfzctnzpbjfLY1lgoeLnz6aAg9A6rLu30hxB0ZWv5Kqb5AX39/fyNjGCN2C/z2CbQcAfXvL/Lm+04VDGI7nniFgSE1mdi7CRVlEJsQopCU1troDISGhuqIiAijY1hOZip81g7cysPIreBa+D/IZlzNY+bGI3y9K44anqV5d0AAnRtWLbGoQgjrpZTap7UOvZttZbePpWkNq16CjGQY8mORin/HsSTGLo0m/mIWQ9vW4fUejSjrJi+hEKLopDksLXIxHFoJ970F3sGF2iQtM5d31x7kp4h46lYuw0/PtKWVX6USDiqEsGdS/paUegLWvQ51OkC7Fwq1yfoD55m44gCpGTk817keL95bXwaxCSGKTcrfUvLzYOkzoJxhwFxwun2BJ6ZnM2llDGujz9PEuzwLhrUkoKanhcIKIeydlL+l7JgF8Xtg0JdQodYt76a1ZukfZ3l79UGycvN5rXtDRnasK4PYhBBmJeVvCfERsG06BP4LAh+89d0uZjJu2QG2H02iRZ2KTB8UhH/VshYMKoRwFFL+Je3qFVg6AsrXgF7v3fQuJpPm299PMX3dYTTwVr+mPN6mDk4yiE0IUUKk/EvahrGQehKGrYHS/zx5SmzSFcLCo9gbd5GODaowZUAAPhVlEJsQomRJ+ZekQ6vgj4XQ4RXwbf+3m3LzTczfcYIPNh+jtIszMx8KZlBITRnNIISwCCn/kpJ+Hla+WHAsf+dxf7vpwNk0xoRHEZNwmV6B1ZnUrylVy8kgNiGE5Uj5lwSTCZY/B7lZMPALKFUwcyc7N5+Pfj7G59tPUNHDlbmPhdAjwHzn6RVCiMKS8i8Je+dD7M/QexZUaQBARFwqr4dHcSIpg4da+DChdxM8PVwMDiqEcFRS/uaWeAg2ToT63SH0aa5czeO99YdZ+NspalYozcKnWtGxQRWjUwohHJyUvznlXYXwEeBWDvrPYduxZMYtjSYhLYsn2vryWveGlJFBbEIIKyBNZE5bJsOFaK4M/I431iaw9I+z1KtShiWj2tKijgxiE0JYDyl/czmxDXbN4ZTfYAatdONSZgKju/gzuqu/DGITQlgdKX9zyLpI/tJRJLn40P1Qd/xruvPNU61oWkMGsQkhrJOUfzFpk4kzC5/B+8oFns2bzEs9ghlxjx+lZBCbEMKKSfkXw5nUTNZ8O5tRqRtYXHYYs554grpVZBCbEML6SfnfhXyTZuHuOBZv2MEy9TEXKoUw+PlZOJWSf04hhG2Qtiqi44npvL4kisjTqaz3nIuHLkXZoV+DFL8QwoZIYxVSbr6Jz7fF8tHPx/Fwc2ZVsz00OBwDA+ZBxTpGxxNCiCKR8i+E6Pg0Xluyn8Pn0+kd5M27LXOo8P2nEDAIgv5ldDwhhCgyKf/byM7N54PNx5i/4wReZVz5/PEWdK9fDj7vCGWrF8zukRHMQggbJOV/C7+fSCFsaTQnkzMY3LIWY3s1xrO0C6x6GVJi4YmVULqi0TGFEOKuSPnfID07l+nrD/Ptb6epVak03w1vTXv/ygU3Hl4L+xZAuxfBr6OxQYUQohik/K/zy+FExi+L5tzlbJ7u4Me/uzXAw/XaP1H6BVg5GqoHQtcJxgYVQohikvIHUjNymLz6IMv+PEv9qmUJf7YdIbWv26WjdUHx52RcOzmLm3FhhRDCDBy6/LXWrIk+x5srYkjLyuXFe+vzfJd6uJW6YRDb3i/g2Ebo+R5UbWRMWCGEMCOHLf8Ll7OZsPwAmw5eIMjHk2+Ht6axd/l/3jHpCGycAP73QasRlg8qhBAlwOHKX2vNj3vP8O7aQ+TkmRjfqzFPtve9+SC2vBwIHw6uZaD/p3JYpxDCbjhU+Z9OySRsaRS7YlNo7VeJ6YOC8K1c5tYb/PIunI+CwYuhXDXLBRVCiBLmEOWfb9Is2HmSmRuPUMrJiSkDAhncshZOTrd5Jx/3K+z8EEKegEa9LRdWCCEswO7L/+iFa4PYzlyia6OqvDsgAG/P0rffKOsSLH0GKvlB9ymWCSqEEBZkt+Wfk2fis62xzPnlGOXcXfhwcDP6BddAFWa//dr/QPo5eHoTuMl8fiGE/bHL8t9/5hJjwqM4fD6d/s1q8EafJniVLeSx+VH/hej/Qpfx4NOiZIMKIYRB7Kr8s3Lymb35KF/sOEHVcu58MTSU+5oU4Q+1l07Dmn9DrdbQ4dWSCyqEEAYze/krpcoAnwI5wFat9Xfmfo6b2R2bQtjSKE6lZDKkdW3CejaivLtL4R/AlA/LRoE2wcB54GxXPxeFEOJvCnWWcaXUV0qpRKXUgRuu76GUOqKUOq6UCrt29UBgidZ6BNDPzHn/4XJ2LmOXRvPI/N8AWDyiNVMGBBat+AF2fQSndkKvGVDR1/xBhRDCihT27e3XwBxg4f+uUEo5A58A9wPxwF6l1ErAB4i+drd8syW9iV+OJDI2PJrE9GxGdqzLK/c1oLSr8503vFFCJGx5F5o8AMGPmD+oEEJYmUKVv9Z6u1LK94arWwHHtdYnAJRSPwD9KfhB4ANEcpvfLJRSI4GRALVr1y5qbgDOXcrGs7QLcx9vQbNaFe7qMQC4EAPla0Cf2fIpXiGEQ1Ba68LdsaD8V2utA65dfhDoobUefu3y40BrYAwFvyVkA78WZp9/aGiojoiIKHJ4k0mTZ9K4lirU3qvby7sq0zqFEDZFKbVPax16N9sW56+aN3uLrLXWGcCTxXjcQnNyUrje7lO6RSHFL4RwIMV5yxwP1Lrusg+QULw4QgghLKE45b8XqK+U8lNKuQKDgZXmiSWEEKIkFfZQz++B3UBDpVS8UupprXUeMBrYABwCftJax5RcVCGEEOZS2KN9bnr8o9Z6LbDWrImEEEKUODMcJnP3lFJ9lVLz0tLSjIwhhBAOx9Dy11qv0lqP9PT0NDKGEEI4HEPLXwghhDEK/SGvEg2hVBJw6rqrPIG0Ql6+/v8rA8lminXjcxbnvre6/WbXy9pvfZ2s/Z+3GbX2O92/qLcV9uv8xsv2+NoX5Xu+jNa6SiEz/53W2ur+A+YV9vIN/x9RUhmKc99b3X6z62Xtt75O1v7P24xa+53uX9TbCvt17givvaW+5611t8+qIly+8baSylCc+97q9ptdL2u/9XWy9sI/990o6mPe7v5Fva0oX+f2/tpb5HveKnb7mItSKkLf5ZwLWydrl7U7Ikdef3HXbq3v/O/WPKMDGEjW7pgcee3g2Osv1trt6p2/EEKIwrG3d/5CCCEKQcpfCCEckJS/EEI4ILsuf6VUGaXUN0qp+UqpR43OY0lKqbpKqS+VUkuMzmJpSqkHrr3mK5RS3YzOY0lKqcZKqblKqSVKqWeNzmNp177n9yml+hidxZKUUp2VUjuuvfadC7ONzZW/UuorpVSiUurADdf3UEodUUodV0qFXbt6ILBEaz0C6GfxsGZWlLVrrU9orZ82Jqn5FXHty6+95sOAhw2Ia1ZFXPshrfUo4F+AzR8CWcTvdyg4jexPlk1ZMoq4dg1cAdwpONHWnZnr03GW+g/oCIQAB667zhmIBeoCrsB+oAkwFmh27T6Ljc5uybVfd/sSo3MbuPZZQIjR2S29dgre6OwChhid3ZJrB+6j4KRSw4A+Rme38Nqdrt1eDfiuMI9vc+/8tdbbgdQbrm4FHNcF73ZzgB+A/hT8BPS5dh+bW+uNirh2u1KUtasC04F1Wus/LJ3V3Ir6umutV2qt2wE2v6uziGvvArQBhgAjlFI2/T1flLVrrU3Xbr8IFOqE5MU5gbs1qQmcue5yPNAa+AiYo5TqTcl9JNxoN127UsoLeBdorpQaq7Weaki6knWr1/0FCt4Feiql/LXWc40IV8Ju9bp3pmB3pxv2e6Klm65daz0aQCk1DEi+rhDtya1e94FAd6ACMKcwD2Qv5a9ucp3WWmcAT1o6jIXdau0pwChLh7GwW639Iwp+8NuzW619K7DVslEs7qZr/+t/tP7aclEs7lav+1JgaVEeyKZ/LbpOPFDruss+QIJBWSxN1v7/ZO2OQdb+/+567fZS/nuB+kopP6WUKwV/9FlpcCZLkbXL2mXtsvYis7nyV0p9D+wGGiql4pVST2ut84DRwAbgEPCT1jrGyJwlQdYua5e1y9ox09plsJsQQjggm3vnL4QQovik/IUQwgFJ+QshhAOS8hdCCAck5S+EEA5Iyl8IIRyQlL8QQjggKX8hhHBAUv5CCOGA/g9qr+Yd/S+S7QAAAABJRU5ErkJggg==\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "fig, ax = plt.subplots()\n",
+    "\n",
+    "ax.plot(0.90*(R)**3.45, R, label=\"rocky\")\n",
+    "ax.plot(1.74*(R)**1.58, R, label=\"volatile\")\n",
+    "ax.plot(Mot, R)\n",
+    "ax.loglog()\n",
+    "ax.legend()\n",
+    "plt.show()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
