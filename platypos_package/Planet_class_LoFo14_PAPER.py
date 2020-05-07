@@ -12,8 +12,9 @@ from Mass_evolution_function import mass_planet_RK4_forward_LO14_PAPER # highest
 
 class planet_LoFo14_PAPER():
     """
-    Structure of star_dictionary: {'star_id': "dummySun", 'mass': mass_star, 'radius': radius_star, 'age': age_star,
-        'L_bol': L_bol, 'Lx_age': Lx_age}
+    Need star and planet dictionary to initialize a planet object.
+    Structure of star_dictionary: {'star_id': "dummySun", 'mass': mass_star, 'radius': radius_star, 
+                                   'age': age_star, 'L_bol': L_bol, 'Lx_age': Lx_age}
     Structure of planet_dict: {"core_mass": m_c, "fenv": f, "distance": a, "metallicity": metal}
     """
     def __init__(self, star_dictionary, planet_dict):
@@ -143,19 +144,8 @@ class planet_LoFo14_PAPER():
     
     def evolve_forward(self, t_final, initial_step_size, epsilon, K_on, beta_on, evo_track_dict, path_for_saving, planet_folder_id):
         """ Call this function to make the planet evolve. """
-        # create a planet ID -> used for filname to save the result
-#         self.planet_id = 'planet_a'+str(np.round(self.distance, 3)).replace('.', 'dot') + \
-#                          '_Mcore'+str(np.round(self.core_mass,3)).replace(".", "dot") + '_fenv' + \
-#                          str(np.round(self.fenv,3)) + '_' + self.metallicity + \
-#                          '_Mstar' + str(np.round(self.mass_star,3)).replace(".", "dot") + "_K_" + K_on + "_beta_" + beta_on + \
-#                          "_track_" + str(evo_track_dict["t_start"]) + "_" + str(evo_track_dict["t_sat"]) + \
-#                          "_" + str(t_final) + "_" + str(evo_track_dict["Lx_max"]) + \
-#                         "_" + str(evo_track_dict["dt_drop"]) + "_" + str(evo_track_dict["Lx_drop_factor"])
         
-        # write info with planet parameters to file!!
-        # also track params!
-        
-        
+        # set planet id
         self.planet_id = planet_folder_id + "_track_" + str(evo_track_dict["t_start"]) + "_" + str(evo_track_dict["t_sat"]) + \
                          "_" + str(t_final) + "_" + str(evo_track_dict["Lx_max"]) + \
                         "_" + str(evo_track_dict["dt_drop"]) + "_" + str(evo_track_dict["Lx_drop_factor"])
@@ -172,8 +162,10 @@ class planet_LoFo14_PAPER():
                 pass
             else:
                 p = open(path_for_saving+planet_folder_id+".txt", "a") 
-                planet_params = "a,core_mass,fenv,metallicity\n"+ str(self.distance) + "," + str(self.core_mass) + "," \
-                                                                   + str(self.fenv) + "," + self.metallicity
+                planet_params = "a,core_mass,fenv,mass,radius,metallicity,age\n" + \
+                                str(self.distance) + "," + str(self.core_mass) + "," + \
+                                str(self.fenv) + "," + str(self.mass) + "," + str(self.radius) + "," + \
+                                self.metallicity + "," + str(self.age)
                 p.write(planet_params)
                 p.close() 
             ###################################

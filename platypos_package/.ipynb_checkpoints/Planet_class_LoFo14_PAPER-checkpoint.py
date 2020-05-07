@@ -12,8 +12,9 @@ from Mass_evolution_function import mass_planet_RK4_forward_LO14_PAPER # highest
 
 class planet_LoFo14_PAPER():
     """
-    Structure of star_dictionary: {'star_id': "dummySun", 'mass': mass_star, 'radius': radius_star, 'age': age_star,
-        'L_bol': L_bol, 'Lx_age': Lx_age}
+    Need star and planet dictionary to initialize a planet object.
+    Structure of star_dictionary: {'star_id': "dummySun", 'mass': mass_star, 'radius': radius_star, 
+                                   'age': age_star, 'L_bol': L_bol, 'Lx_age': Lx_age}
     Structure of planet_dict: {"core_mass": m_c, "fenv": f, "distance": a, "metallicity": metal}
     """
     def __init__(self, star_dictionary, planet_dict):

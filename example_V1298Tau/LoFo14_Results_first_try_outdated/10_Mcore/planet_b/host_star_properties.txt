@@ -1,2 +1,0 @@
-star_id,mass_star,radius_star,age,Lbol,Lx_age
-V1298Tau,1.101,1.345,23.0,0.934,1.3e+30
