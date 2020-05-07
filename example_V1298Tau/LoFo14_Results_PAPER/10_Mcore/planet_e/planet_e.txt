@@ -1,0 +1,2 @@
+a,core_mass,fenv,mass,radius,metallicity,age
+0.308,10.0,31.66361929498906,14.63349375081365,8.74,solarZ,23.0
