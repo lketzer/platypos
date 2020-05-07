@@ -1,7 +1,8 @@
 # PLATYPOS - PLAneTarY PhOtoevaporation Simulator
 
 
-**platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve (LoF014 planet with rocky core & gaseous envelope OR planet based on mass-radius relation for mature planets (Ot20))
+**platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve 
+                      (LoF014 planet with rocky core & gaseous envelope OR planet based on mass-radius relation for mature planets (Ot20))
 
 **supplementary_files**: contains some extra files for plotting
 
