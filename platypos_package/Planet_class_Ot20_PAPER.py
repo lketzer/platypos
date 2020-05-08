@@ -89,8 +89,8 @@ class planet_Ot20_PAPER():
         """ function to set the right planet name based on the track specified. This can then be used to check if 
         a particular planet on a particular track has already evolved. """
         self.planet_id = 'planet_a'+str(np.round(self.distance, 3)).replace('.', 'dot') + \
-                         '_Mcore'+str(np.round(self.core_mass,3)).replace(".", "dot") + '_fenv' + \
-                         str(np.round(self.fenv,3)) + '_' + self.metallicity + \
+                         'radius'+str(np.round(self.radius,3)).replace(".", "dot") + '_mass' + \
+                         str(np.round(self.mass,3)) + \
                          '_Mstar' + str(np.round(self.mass_star,3)).replace(".", "dot") + "_K_" + K_on + \
                          "_beta_" + beta_on + \
                          "_track_" + str(evo_track_dict["t_start"]) + "_" + str(evo_track_dict["t_sat"]) + \
