@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 def create_summary_files_with_final_planet_parameters(path_save):
-    
+    """ Function NOT finished. In principle it should create a summary file of initial and final parameters."""
     files = os.listdir(path_save)
     non_empty_folders = []
     for f in files:

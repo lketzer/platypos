@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 def read_results_file(path, filename):
-    """function to read in the results file"""
+    """Function to read in the results file for an individual track. """
     df = pd.read_csv(path+filename, float_precision='round_trip') # to avoid pandas doing sth. weird to the last digit
     # Pandas uses a dedicated dec 2 bin converter that compromises accuracy in preference to speed.
     # Passing float_precision='round_trip' to read_csv fixes this.
@@ -10,7 +10,7 @@ def read_results_file(path, filename):
     return df#t, M, R, Lx
 
 def read_in_PLATYPOS_results(path_to_results, N_tracks):
-    """ call this function to read in the results.
+    """ Call this function to read in ALL the results.
     Input:
     ------
     path_to_results: path to the folder which containts all the results (i.e. all the folders for the individual planets)
@@ -44,10 +44,7 @@ def read_in_PLATYPOS_results(path_to_results, N_tracks):
 
     # Next, read in the results for each planet
     planet_df_dict = {} # dictionary of results, with planet names as keys, and corresponding results-dataframes as values
-    # track_name_dict = {} # dictionary with planet names as keys, and list of track names within each planet folder as values
-    # track_evolved_off_dict = {} # same structure as track_name_dict, but with True or False for each track indicating 
-                                # whether planet has evolved off grid (True) or not (False)
-    tracks_dict = {} # combined track_name_dict & track_evolved_off_dict
+    tracks_dict = {} # dictionary with planet names as keys, and list of track infos for each planet folder as values
     planet_init_dict = {} # dictionary of initial planet parameters,with planet names are keys, parameters the values
 
     for i, f in enumerate(non_empty_folders):
@@ -96,27 +93,8 @@ def read_in_PLATYPOS_results(path_to_results, N_tracks):
             # NEXT, read in track names in case I need this info later, for example for knowing the properties of each track
             # track number corresponds to t1,2,3, etc..
             track_dict = {}
-            # flag planets which have moved off (important for MESA planets for now)
+            # flag planets which have moved off (only important for MESA planets for now)
             list_planets_evolved_off = ["track"+file.rstrip(".txt").split("track")[1] for file in all_files_in_f if "evolved_off" in file]
-            ##########################################
-            # old code (contains unnecessary steps)
-    #         track_evooff_dict = {} 
-
-    #         for i, file in enumerate(result_files_sorted):
-    #             track_dict[i+1] = file[len(f+"_"):].rstrip(".txt") # track name
-    #             if "track"+file.rstrip(".txt").split("track")[1] in list_planets_evolved_off: 
-    #                 track_evooff_dict[i+1] = True # if track name in list of planets which has evolved off, set flag to True
-    #             else:
-    #                 track_evooff_dict[i+1] = False
-
-    #         # now I have a dataframe for each planet, which contains all the evolutions for each track
-    #         planet_df_dict[f] = df_all_tracks # add to dictionary with planet name as key
-    #         track_name_dict[f] = track_dict # add tracks list to dictionary
-    #         track_evolved_off_dict[f] = track_evooff_dict # add flags to dictionary
-    #         # combine the two trac dicts into one
-    #         tracks_dict[f] = list(zip(track_name_dict[f].keys(), track_name_dict[f].values(), track_evolved_off_dict[f].values()))
-            ########################################## 
-
             track_info_list = []
             for i, file in enumerate(result_files_sorted):
                 if "track"+file.rstrip(".txt").split("track")[1] in list_planets_evolved_off: 
@@ -133,18 +111,13 @@ def read_in_PLATYPOS_results(path_to_results, N_tracks):
     planet_init_df = pd.DataFrame.from_dict(planet_init_dict, orient='index', columns=df_pl.columns)
     # now I can easily access the planet name, semi-major axies, core mass, initial mass and radius
     print("\nTotal number of planets to analyze: ", len(planet_init_df))
-
-    # convert semi-major axis to period (host-star properties known)
-    #P_p_arr = get_period_from_a(1.0, a_p_arr)
-
-    # **In principle planet_df_dict & planet_init_df contain all info for analyzing the results**
-    # **(initial and final mass and radius, final age)**
+    
     return planet_df_dict, planet_init_df, tracks_dict
 
 
 def read_in_PLATYPOS_results_dataframe(path_to_results, N_tracks):
     """
-    does some more re-aranging to the data to make it easier to handle
+    Calls read_in_PLATYPOS_results & then does some more re-aranging to the data to make it easier to handle.
     """
     # call read_in_PLATYPOS_results
     planet_df_dict, planet_init_df, tracks_dict = read_in_PLATYPOS_results(path_to_results, N_tracks)
@@ -183,5 +156,4 @@ def read_in_PLATYPOS_results_dataframe(path_to_results, N_tracks):
         for number, evooff in zip(track_number, track_evooff):
             planet_all_df.at[key_pl, "track"+str(number)] = evooff
 
-    #planet_all_df.head()
     return planet_all_df, tracks_dict

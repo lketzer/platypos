@@ -3,21 +3,21 @@ import astropy.units as u
 from astropy import constants as const
 import numpy as np
 
-# rename to beta_fct & K_fct
-
+# TO DO: rename to beta_fct & K_fct
 def beta_fct_LO14(M_p, F_xuv, R_p):
     """Function estimates the beta parameter, which is a correction to the planetary absorption radius in XUV 
-    -> planet appers larger than in optical; this approximation is used in Lalitha et al. 2018 and comes 
-    originally from Salz M., Schneider P., Czesla S., Schmitt J., 2016a, Astronomy & Astrophysics, 585, L2
+    -> planet appers larger than in optical; this approximation comes from a study by Salz et al. (2016)
     -> NOTE from paper: 'The atmospheric expansion can be neglected for massive hot Jupiters, but in the range 
     of superEarth-sized planets the expansion causes mass-loss rates that are higher by a factor of four.' 
-    Sidenote: fct works for arrays of M_p/Fxuv or single values.
     
     Parameters:
     ----------
-    @param M_p: (float) An float for input; current mass of the planet
-    @param F_xuv: (float)
-    @param R_p: (float)
+    @param M_p: (float) mass of the planet in Earth units
+    @param F_xuv: (float) XUV flux recieved by planet
+    @param R_p: (float) radius mass of the planet in Earth units
+    
+    Output:
+    beta parameter
     """
     M_earth = const.M_earth.cgs.value
     R_earth = const.R_earth.cgs.value
@@ -40,14 +40,13 @@ def beta_fct_LO14(M_p, F_xuv, R_p):
 
 def K_fct_LO14(a_pl, M_pl, M_star, R_pl):
     """K correction factor to take into account tidal influences of the host star on the planetary atmosphere (from Erkaev et al. 2007)
-    Sidenote: fct works for arrays of M_p/Fxuv or single values.
     
     Parameters:
     ----------
-    a_pl:
-    M_pl:
-    M_star:
-    R_pl:
+    a_pl: star-planet separation in A.U.
+    M_pl: mass of the planet in Earth units
+    M_star: mass of the star in solar units
+    R_pl: radius of the planet in Earth units
     """
     AU = const.au.cgs.value
     M_sun = const.M_sun.cgs.value

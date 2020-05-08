@@ -3,15 +3,23 @@ import math
 import numpy as np
 
 def create_planet_chunks(curr_path, folder_name, list_planets, chunk_size):
-    """ """
-    # check if directroy for saving the results existst, if not create
+    """ Function creates the directory & subdirectory structure for saving the results 
+    for all the planets in "list_planets". In addition, it divides list_planets into smaller chunks. 
+    This is needed if "list_planets" is very long, and avoids the multiprocessing-action in the evolve_ensamble-function from crashing.
+    
+    Return:
+    ------
+    path_save: path specifying where to save the results
+    planets_chunks: chunked-up list of planets, which can be passed to "evolve_ensemble" to evolve
+    """
+    
     path_save = curr_path+folder_name
     if os.path.isdir(path_save):
+        # check if directroy for saving the results existst, if not create
         print("Folder -> "+folder_name+" <- exists.")
         pass
     else:
         os.mkdir(path_save)
-
         
     # create folders, one for each planet in the population 
     # (what this means: two planets with the exact same parametes will get two different folders)
