@@ -10,7 +10,7 @@ We do not make use of full-blown hydrodynamical simulations, but instead couple 
 \dot{M} = \epsilon \frac{(\pi R_{XUV}^2) F_{\mathrm{XUV}}}{K G M_{pl}/R_{pl} } = \epsilon \frac{3 \beta^2 F_{\mathrm{XUV}}}{4 G K \rho_{pl}}\,,
 ```
 
-where ```math F_{\mathrm{XUV}}``` is the flux impinging on the planet, $R_{pl}$ and $R_{XUV}$ are the planetary radii at optical and XUV wavelengths, respectively; \textbf{we use $\beta = R_{XUV}/R_{pl}$ as a shorthand in the following}. $M_{pl}$ is the mass and $\rho_{pl}$ the density of the planet, $\epsilon$ is the efficiency of the atmospheric escape with a value between 0 and 1, and $K$ is a factor representing the impact of Roche lobe overflow \citep{Erkaev2007}, which can take on values of 1 for no Roche lobe influence and $<1$ for planets filling significant fractions of their Roche lobes.
+where ```mathF_{\mathrm{XUV}}``` is the flux impinging on the planet, $R_{pl}$ and $R_{XUV}$ are the planetary radii at optical and XUV wavelengths, respectively; \textbf{we use $\beta = R_{XUV}/R_{pl}$ as a shorthand in the following}. $M_{pl}$ is the mass and $\rho_{pl}$ the density of the planet, $\epsilon$ is the efficiency of the atmospheric escape with a value between 0 and 1, and $K$ is a factor representing the impact of Roche lobe overflow \citep{Erkaev2007}, which can take on values of 1 for no Roche lobe influence and $<1$ for planets filling significant fractions of their Roche lobes.
 
 *Planet Model description*:
 At the moment, the user can choose between two planet models.
