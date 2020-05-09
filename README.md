@@ -6,7 +6,6 @@ Tool to estimate the atmospheric mass loss of planets induced by the stellar X-r
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
 
 ### Mass-loss description: <br> 
--------------------------
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\dot{M}&space;=&space;\epsilon&space;\frac{(\pi&space;R_{XUV}^2)&space;F_{\mathrm{XUV}}}{K&space;G&space;M_{pl}/R_{pl}&space;}&space;=&space;\epsilon&space;\frac{3&space;\beta^2&space;F_{\mathrm{XUV}}}{4&space;G&space;K&space;\rho_{pl}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\dot{M}&space;=&space;\epsilon&space;\frac{(\pi&space;R_{XUV}^2)&space;F_{\mathrm{XUV}}}{K&space;G&space;M_{pl}/R_{pl}&space;}&space;=&space;\epsilon&space;\frac{3&space;\beta^2&space;F_{\mathrm{XUV}}}{4&space;G&space;K&space;\rho_{pl}}" title="\small \dot{M} = \epsilon \frac{(\pi R_{XUV}^2) F_{\mathrm{XUV}}}{K G M_{pl}/R_{pl} } = \epsilon \frac{3 \beta^2 F_{\mathrm{XUV}}}{4 G K \rho_{pl}}" /></a>
 
 where 
@@ -16,13 +15,13 @@ is the flux impinging on the planet,
 and 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;R_{XUV}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;R_{XUV}" title="\small R_{XUV}" /></a>
 are the planetary radii at optical and XUV wavelengths, respectively; 
-$\beta = R_{XUV}/R_{pl}$. 
-$M_{pl}$ 
+<a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\beta&space;=&space;R_{XUV}/R_{pl}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\beta&space;=&space;R_{XUV}/R_{pl}" title="\small \beta = R_{XUV}/R_{pl}" /></a>.
+<a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;M_{pl}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;M_{pl}" title="\small M_{pl}" /></a>
 is the mass and 
-$\rho_{pl}$ 
+<a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\rho_{pl}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\rho_{pl}" title="\small \rho_{pl}" /></a>
 the density of the planet, 
-$\epsilon$ 
-is the efficiency of the atmospheric escape with a value between 0 and 1, and $K$ is a factor representing the impact of Roche lobe overflow (Erkaev et al., 2007), which can take on values of 1 for no Roche lobe influence and <1 for planets filling significant fractions of their Roche lobes.
+<a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\epsilon" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\epsilon" title="\small \epsilon" /></a>
+is the efficiency of the atmospheric escape with a value between 0 and 1, and K is a factor representing the impact of Roche lobe overflow (Erkaev et al., 2007), which can take on values of 1 for no Roche lobe influence and <1 for planets filling significant fractions of their Roche lobes.
 
 
 ### Planet Model description: <br>
