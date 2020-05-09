@@ -46,6 +46,6 @@ To be implemented...
                          (Tu et al., 2015 model tracks for the X-ray luminosity evolution, 
                          Jackson et al., 2012 sample of X-ray measurements in young clusters)
 
-* **example_V1298Tau**: contains a notebook to reproduce the results from "X-ray irradiation and evaporation of the four young planets around V1298 Tau" (Poppenhaeger et al. 2020)
+* **example_V1298Tau**: contains a notebook to reproduce the results from the paper *X-ray irradiation and evaporation of the four young planets around V1298 Tau* (Poppenhaeger, Ketzer, Mallonn, 2020)
 
 * **population_evolution**: evolve a whole population of planets (to be implemented in the future)
