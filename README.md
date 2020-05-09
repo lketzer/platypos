@@ -28,11 +28,13 @@ is the efficiency of the atmospheric escape with a value between 0 and 1, and K 
 At the moment, the user can choose between two planet models.
 
 1. *Planet with a rocky core and H/He envelope atop* <br>
-If this is also the case for the V1298 Tau planets, their current masses could be much lower than estimated by a mass-radius relationship valid for older planets. We approximate this scenario by using models of planets with a hydrogen/helium envelope on top of a 5 and 10 M$_\oplus$ core, using the tabulated models of \citet{LopezFortney2014}. They calculate radii for low-mass planets with hydrogen-helium envelopes on top of Earth-like rocky cores, taking into account the cooling and thermal contraction of the atmospheres of such planets over time. Their simulations extend to young planetary ages, at which planets are expected to still be warm and possibly inflated. \citet{LopezFortney2014} provide simple analytical fits to their simulation results, which we use to trace the thermal and photoevaporative evolution of the planetary radius over time. We refer to this as the ''fluffy planet scenario'' in the following.\\
+We use the tabulated models of Lopez & Fortney (2014), who calculate radii for low-mass planets with hydrogen-helium envelopes on top of Earth-like rocky cores, taking into account the cooling and thermal contraction of the atmospheres of such planets over time. Their simulations extend to young planetary ages, at which planets are expected to still be warm and possibly inflated. Simple analytical fits to their simulation results are provided, which we use to trace the thermal and photoevaporative evolution of the planetary radius over time.
 
-1. *Planet which follows the empirical mass-radius relationships observed for planets around older stars* <br>
-(e.g. Otegi et al. (2020), also Chen & Kipping (2017)). These relationships show two regimes, one for small rocky planets up to radii of about $2R_\oplus$ and one for larger planets with volatile-rich envelopes. The scatter is low in the rocky planet regime and larger in the gaseous planet regime: as core vs.\ envelope fractions may vary, there is a broader range of observed masses at a given planetary radius for those larger planets. It is noteworthy that the young planet K2-100b, which has an age of $\approx 700$ Myr based on the cluster membership of its host star \citep{Mann2017}, falls into the volatile envelope regime and follows the mass-radius relationship seen for older planets.
+1. *Planet which follows the empirical mass-radius relationships observed for planets around older stars* (see Otegi et al. (2020), also Chen & Kipping (2017)) <br>
+These "mature" relationships show two regimes, one for small rocky planets up to radii of about 2 Earth radii and one for larger planets with volatile-rich envelopes. The scatter is low in the rocky planet regime and larger in the gaseous planet regime: as core vs. envelope fractions may vary, there is a broader range of observed masses at a given planetary radius for those larger planets. 
 
+1. Giant planets with mass-radius relations computed with MESA
+To be implemented...
 
 
 ## Repository Structure:
@@ -40,8 +42,10 @@ If this is also the case for the V1298 Tau planets, their current masses could b
 **platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve <br>
                       (LoF014 planet with rocky core & gaseous envelope OR planet based on mass-radius relation for mature planets (Ot20))
 
-**supplementary_files**: contains some extra files for plotting
+**supplementary_files**: contains some extra files for plotting 
+                         (Tu et al., 2015 model tracks for the X-ray luminosity evolution, 
+                         Jackson et al., 2012 sample of X-ray measurements in young clusters)
 
-**example_V1298Tau**: evolve the four young V1298 Tau planets as shown in "X-ray irradiation and evaporation of the four young planets around V1298 Tau" (Poppenhaeger et al. 2020)
+**example_V1298Tau**: contains a notebook to reproduce the results from "X-ray irradiation and evaporation of the four young planets around V1298 Tau" (Poppenhaeger et al. 2020)
 
-**population_evolution**: evolve a whole population of planets (implemented in the future)
+**population_evolution**: evolve a whole population of planets (to be implemented in the future)
