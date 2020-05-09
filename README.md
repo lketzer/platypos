@@ -33,19 +33,19 @@ We use the tabulated models of Lopez & Fortney (2014), who calculate radii for l
 1. *Planet which follows the empirical mass-radius relationships observed for planets around older stars* (see Otegi et al. (2020), also Chen & Kipping (2017)) <br>
 These "mature" relationships show two regimes, one for small rocky planets up to radii of about 2 Earth radii and one for larger planets with volatile-rich envelopes. The scatter is low in the rocky planet regime and larger in the gaseous planet regime: as core vs. envelope fractions may vary, there is a broader range of observed masses at a given planetary radius for those larger planets. 
 
-1. Giant planets with mass-radius relations computed with MESA
+1. *Giant planets with mass-radius relations computed with MESA*
 To be implemented...
 
 
 ## Repository Structure:
 
-**platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve <br>
+* **platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve <br>
                       (LoF014 planet with rocky core & gaseous envelope OR planet based on mass-radius relation for mature planets (Ot20))
 
-**supplementary_files**: contains some extra files for plotting 
+* **supplementary_files**: contains some extra files for plotting 
                          (Tu et al., 2015 model tracks for the X-ray luminosity evolution, 
                          Jackson et al., 2012 sample of X-ray measurements in young clusters)
 
-**example_V1298Tau**: contains a notebook to reproduce the results from "X-ray irradiation and evaporation of the four young planets around V1298 Tau" (Poppenhaeger et al. 2020)
+* **example_V1298Tau**: contains a notebook to reproduce the results from "X-ray irradiation and evaporation of the four young planets around V1298 Tau" (Poppenhaeger et al. 2020)
 
-**population_evolution**: evolve a whole population of planets (to be implemented in the future)
+* **population_evolution**: evolve a whole population of planets (to be implemented in the future)
