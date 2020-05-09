@@ -1,7 +1,7 @@
 # PLATYPOS - PLAneTarY PhOtoevaporation Simulator
 Tool to estimate the atmospheric mass loss of planets induced by the stellar X-ray and extreme UV irradiance. 
 
-****
+
 ## Our Model Assumptions
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
 
@@ -36,7 +36,7 @@ If this is also the case for the V1298 Tau planets, their current masses could b
 (e.g. Otegi et al. (2020), also Chen & Kipping (2017)). These relationships show two regimes, one for small rocky planets up to radii of about $2R_\oplus$ and one for larger planets with volatile-rich envelopes. The scatter is low in the rocky planet regime and larger in the gaseous planet regime: as core vs.\ envelope fractions may vary, there is a broader range of observed masses at a given planetary radius for those larger planets. It is noteworthy that the young planet K2-100b, which has an age of $\approx 700$ Myr based on the cluster membership of its host star \citep{Mann2017}, falls into the volatile envelope regime and follows the mass-radius relationship seen for older planets.
 
 
-****
+
 ## Repository Structure:
 
 **platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve <br>
