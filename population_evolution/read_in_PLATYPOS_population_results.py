@@ -109,6 +109,7 @@ def read_in_PLATYPOS_results(path_to_results, N_tracks):
 
     # convert the planet_init_dict to a dataframe
     planet_init_df = pd.DataFrame.from_dict(planet_init_dict, orient='index', columns=df_pl.columns)
+    planet_init_df.sort_index(inplace=True)
     # now I can easily access the planet name, semi-major axies, core mass, initial mass and radius
     print("\nTotal number of planets to analyze: ", len(planet_init_df))
     
@@ -118,6 +119,9 @@ def read_in_PLATYPOS_results(path_to_results, N_tracks):
 def read_in_PLATYPOS_results_dataframe(path_to_results, N_tracks):
     """
     Calls read_in_PLATYPOS_results & then does some more re-aranging to the data to make it easier to handle.
+    Returns:
+    planet_all_df: dataframe with initial and final planet parameters
+    tracks_dict" dictinary with info about the evolutionary tracks
     """
     # call read_in_PLATYPOS_results
     planet_df_dict, planet_init_df, tracks_dict = read_in_PLATYPOS_results(path_to_results, N_tracks)
@@ -146,6 +150,7 @@ def read_in_PLATYPOS_results_dataframe(path_to_results, N_tracks):
 
     # concatenate planet_init_df and planet_final_df into one master dataframe
     planet_all_df = pd.concat([planet_init_df, planet_final_df], axis=1, sort=False)
+    planet_all_df.sort_index(inplace=True)
     # together with tracks_dict this allows me to select, filter, analyze any track and any planet
 
     # to make my life even easier, add evolved_off info to my master dataframe

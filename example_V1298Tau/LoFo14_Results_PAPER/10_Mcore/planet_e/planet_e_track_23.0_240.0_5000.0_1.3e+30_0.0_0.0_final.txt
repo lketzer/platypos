@@ -1,2 +1,0 @@
-a,core_mass,mass,radius,metallicity,track
-0.308,10.0,13.71865270790178,5.34025267053744,solarZ,planet_e_track_23.0_240.0_5000.0_1.3e+30_0.0_0.0

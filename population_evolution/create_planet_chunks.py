@@ -15,7 +15,7 @@ def create_planet_chunks(curr_path, folder_name, list_planets, chunk_size):
     
     path_save = curr_path+folder_name
     if os.path.isdir(path_save):
-        # check if directroy for saving the results existst, if not create
+        # check if directory for saving the results existst, if not create
         print("Folder -> "+folder_name+" <- exists.")
         pass
     else:
@@ -33,14 +33,14 @@ def create_planet_chunks(curr_path, folder_name, list_planets, chunk_size):
         else:
             os.mkdir(path_save+planet_id)
 
-    result_folders = os.listdir(path_save)
+    result_folders = np.sort(os.listdir(path_save))
     planets_dict = {} # dictionary with folder-planet pairs (one planet belongs into one seperate folder)
     for i in range(len(list_planets)):
         planets_dict[result_folders[i]] = list_planets[i]
             
     # divide dictionary into smaller bits -> I found that if I pass all planets at once for multiprocessing, it fills up my memory
     # this is why I only multiprocess a smaller number at a given time (at least this is what I think I'm doing)
-    number_of_splits = math.ceil(len(planets_dict)/9)
+    number_of_splits = math.ceil(len(planets_dict)/chunk_size)
     planets_arr = [[key, value] for key, value in planets_dict.items()]
     planets_chunks = np.array_split(planets_arr, number_of_splits)
     # now I have an list of [folder-planet] pairs, which I can pass to the multiprocessing_func
