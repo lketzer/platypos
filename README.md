@@ -40,10 +40,9 @@ To be implemented...
 
 ## Repository Structure:
 
-* **platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve <br>
-                      (LoF014 planet with rocky core & gaseous envelope OR planet based on mass-radius relation for mature planets (Ot20))
+* **platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve 
 
-* **supplementary_files**: contains some extra files for plotting <br>
+* **supplementary_files**: contains some extra files for plotting 
                          (Tu et al., 2015 model tracks for the X-ray luminosity evolution, 
                          Jackson et al., 2012 sample of X-ray measurements in young clusters)
 
