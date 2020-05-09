@@ -30,10 +30,11 @@ At the moment, the user can choose between two planet models.
 1. *Planet with a rocky core and H/He envelope atop* <br>
 We use the tabulated models of Lopez & Fortney (2014), who calculate radii for low-mass planets with hydrogen-helium envelopes on top of Earth-like rocky cores, taking into account the cooling and thermal contraction of the atmospheres of such planets over time. Their simulations extend to young planetary ages, at which planets are expected to still be warm and possibly inflated. Simple analytical fits to their simulation results are provided, which we use to trace the thermal and photoevaporative evolution of the planetary radius over time.
 
-1. *Planet which follows the empirical mass-radius relationships observed for planets around older stars* (see Otegi et al. (2020), also Chen & Kipping (2017)) <br>
+1. *Planet which follows the empirical mass-radius relationships observed for planets around older stars* <br> 
+(see Otegi et al. (2020), also Chen & Kipping (2017)) <br> 
 These "mature" relationships show two regimes, one for small rocky planets up to radii of about 2 Earth radii and one for larger planets with volatile-rich envelopes. The scatter is low in the rocky planet regime and larger in the gaseous planet regime: as core vs. envelope fractions may vary, there is a broader range of observed masses at a given planetary radius for those larger planets. 
 
-1. *Giant planets with mass-radius relations computed with MESA*
+1. *Giant planets with mass-radius relations computed using MESA* <br>
 To be implemented...
 
 
@@ -42,7 +43,7 @@ To be implemented...
 * **platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve <br>
                       (LoF014 planet with rocky core & gaseous envelope OR planet based on mass-radius relation for mature planets (Ot20))
 
-* **supplementary_files**: contains some extra files for plotting 
+* **supplementary_files**: contains some extra files for plotting <br>
                          (Tu et al., 2015 model tracks for the X-ray luminosity evolution, 
                          Jackson et al., 2012 sample of X-ray measurements in young clusters)
 
