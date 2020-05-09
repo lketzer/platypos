@@ -14,8 +14,8 @@ is the flux impinging on the planet,
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;R_{pl}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;R_{pl}" title="\small R_{pl}" /></a>
 and 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;R_{XUV}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;R_{XUV}" title="\small R_{XUV}" /></a>
-are the planetary radii at optical and XUV wavelengths, respectively; 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\beta&space;=&space;R_{XUV}/R_{pl}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\beta&space;=&space;R_{XUV}/R_{pl}" title="\small \beta = R_{XUV}/R_{pl}" /></a>.
+are the planetary radii at optical and XUV wavelengths, respectively (
+<a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\beta&space;=&space;R_{XUV}/R_{pl}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\beta&space;=&space;R_{XUV}/R_{pl}" title="\small \beta = R_{XUV}/R_{pl}" /></a>).
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;M_{pl}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;M_{pl}" title="\small M_{pl}" /></a>
 is the mass and 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\rho_{pl}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\rho_{pl}" title="\small \rho_{pl}" /></a>
