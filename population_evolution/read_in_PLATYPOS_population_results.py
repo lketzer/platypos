@@ -7,7 +7,7 @@ def read_results_file(path, filename):
     # Pandas uses a dedicated dec 2 bin converter that compromises accuracy in preference to speed.
     # Passing float_precision='round_trip' to read_csv fixes this.
     t, M, R, Lx = df["Time"].values, df["Mass"].values, df["Radius"].values, df["Lx"].values
-    return df#t, M, R, Lx
+    return df
 
 def read_in_PLATYPOS_results(path_to_results, N_tracks):
     """ Call this function to read in ALL the results.
@@ -120,8 +120,9 @@ def read_in_PLATYPOS_results_dataframe(path_to_results, N_tracks):
     """
     Calls read_in_PLATYPOS_results & then does some more re-aranging to the data to make it easier to handle.
     Returns:
-    planet_all_df: dataframe with initial and final planet parameters
-    tracks_dict" dictinary with info about the evolutionary tracks
+    planet_all_df: dataframe with initial and final planet parameters 
+    tracks_dict: dictinary with info about the evolutionary tracks
+    [NOTE: check tracks_dict to see which track is which, i.e. which track number corresponds to the lowest, intermediate & highest activity track]
     """
     # call read_in_PLATYPOS_results
     planet_df_dict, planet_init_df, tracks_dict = read_in_PLATYPOS_results(path_to_results, N_tracks)

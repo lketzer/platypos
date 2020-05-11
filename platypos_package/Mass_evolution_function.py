@@ -11,29 +11,32 @@ import numpy as np
 import math
 
 
+
 def mass_planet_RK4_forward_LO14(epsilon, K_on, beta_on, planet_object, initial_step_size, t_final, track_dict):
-    """USED: Runge-Kutta method to numerically integrate an ordinary differential equation by using a trial step at the 
-    midpoint of an interval to cancel out lower-order error terms.
-    -> Integrate from the current time (t_start (where planet has R0 and M0) into the future. 
-    *********I have sth like: Mdot = f(M_pl, Fxuv), and I want M_pl(t)*********
-    Note: M_star should be defined outside this function.
-    
-    planet_object contains all the initial parameters of the system, including M_star 
-    (but in solar units and this function needs it in cgs)
-    
-    Parameters:
+    """USED: 4th order Runge-Kutta as numerical integration  method 
+    Integrate from the current time (t_start (where planet has R0 and M0) into the future
+    taking into account photoevaporative mass loss. 
+
+    Input:
     ----------
-    Lx_evo:
-    mass_loss_rate_fancy_LO14:
-    calculate_planet_radius:
-    epsilon:
-    K_on:
-    beta_on, 
-    planet_object: planet object which contains also stellar parameters & info about stellar evo track
-    f_env_0: initial envelope mass fraction)
-    step_size: initial step_size (can be adjusted during calculation)
+    epsilon: evaporation efficiency
+    K_on: set use of K parameter on or off 
+    beta_on: set use of beta parameter on or off
+    planet_object: object of planet class which contains also stellar parameters 
+                   and info about stellar evo track
+    step_size: initial step_size, variable 
+    [NOTE: the implementation of a variable step size is somewhat preliminary. The step size is adjusted 
+    (made smaller or bigger depending how fast or slow the mass/radius changes) until the final time step 
+    greater than t_final. This means that if the step size in the end is e.g. 10 Myr, and the integration 
+    is at 4999 Myr, then last time entry will be 4999+10 -> 5009 Myr.]
     t_final: final time of simulation
+    track_dict: dictionary with Lx evolutionary track parameters
+    
+    Output:
+    ----------
+    t_arr, M_arr, R_arr, Lx_arr: array of time, mass, radius and Lx values from t_start to t_final
     """ 
+    
     M_earth = const.M_earth.cgs.value
     R_earth = const.R_earth.cgs.value
     Myr_to_sec = 1e6*365*86400
@@ -51,11 +54,6 @@ def mass_planet_RK4_forward_LO14(epsilon, K_on, beta_on, planet_object, initial_
     M_env0 = M_env = M0 - planet_object.core_mass # initial envelope mass
     M_core = planet_object.core_mass
     
-#     print("Menv (in earth masses) = ", M_env/MEcgs)
-#     print("M_0 = ", np.round(M0/MEcgs, 3))
-#     print("R_0 = ", np.round(R0/REcgs, 3))
-#     print("fenv (%) = ", np.round(f_env, 3))
-    
     # specify beta0 and K0
     if beta_on == "yes": # use the beta estimate from Salz et al. 2016
         beta = beta0 = bk.beta_fct_LO14(M0, Fxuv0, R0)
@@ -65,7 +63,6 @@ def mass_planet_RK4_forward_LO14(epsilon, K_on, beta_on, planet_object, initial_
         K = K0 = bk.K_fct_LO14(planet_object.distance, M0, planet_object.mass_star, R0)
     elif K_on == "no":
         K = K0 = 1.
-#     print("beta0 = ", beta, " - K0 = ", K)
     
     M_arr = []
     M_arr.append(M0)
@@ -77,9 +74,7 @@ def mass_planet_RK4_forward_LO14(epsilon, K_on, beta_on, planet_object, initial_
     Lx_arr = []
     Lx_arr.append(Lx0)
 
-    ################
     # CRITERION when to stop the mass-loss
-    ################
     # for the Lopez planets I have a specified core mass and thus a fixed core radius (bare rocky core)
     R_core = planet_object.core_radius # stop when this radius is reached!
     
@@ -97,82 +92,29 @@ def mass_planet_RK4_forward_LO14(epsilon, K_on, beta_on, planet_object, initial_
         ###############################################################################################################
         Mdot1 = mass_loss_rate_forward_LO14(t, epsilon, K_on, beta_on, planet_object, f_env, track_dict)
         k1 = (dt*Myr_to_sec * Mdot1)/M_earth # mass lost in one timestep in earth masses
-        # check if this new planet would still be larger than core radius!
-        ########################################################
-        # I think I should solve this differently!! TALK TO JORI
-        ########################################################
-        if np.iscomplex(k1):
-            print("Atmosphere has evaportated! Only bare rocky core left! STOP this madness!")
-            # if the stop criterium is reached, I add the core mass & core radius to the array at t_i+1
-            print("t = ", t_arr[-1]+dt)
-            t_arr.append(t_arr[-1]+dt)
-            M_arr.append(M_core)
-            print("M_core = ", M_core)
-            R_arr.append(R_core)
-            print("R_core = ", R_core)
-            Lx_arr.append(Lx_evo(t=t_arr[-1]+dt, track_dict=track_dict))            
-            return np.array(t_arr), np.array(M_arr), np.array(R_arr), np.array(Lx_arr)
-        ###############################################################################################################
         M_05k1 = M + 0.5*k1     
         M_env_05k1 = M_05k1 - M_core
         f_env_05k1 = (M_env_05k1/M_05k1)*100 # new mass fraction  
         
         Mdot2 = mass_loss_rate_forward_LO14(t+0.5*dt, epsilon, K_on, beta_on, planet_object, f_env_05k1, track_dict)
-        #R_p=radius_planet(M + 0.5*k1))
         k2 = (dt*Myr_to_sec * Mdot2)/M_earth
-        if np.iscomplex(k2):
-            print("Atmosphere has evaportated! Only bare rocky core left! STOP this madness!")
-            # if the stop criterium is reached, I add the core mass & core radius to the array at t_i+1
-            print("t = ", t_arr[-1]+dt)
-            t_arr.append(t_arr[-1]+dt)
-            M_arr.append(M_core)
-            print("M_core = ", M_core)
-            R_arr.append(R_core)
-            print("R_core = ", R_core)
-            Lx_arr.append(Lx_evo(t=t_arr[-1]+dt, track_dict=track_dict))            
-            return np.array(t_arr), np.array(M_arr), np.array(R_arr), np.array(Lx_arr)
-        ###############################################################################################################
         M_05k2 = M + 0.5*k2
         M_env_05k2 = M_05k2 - M_core
         f_env_05k2 = (M_env_05k2/M_05k2)*100 # new mass fraction
         
         Mdot3 = mass_loss_rate_forward_LO14(t+0.5*dt, epsilon, K_on, beta_on, planet_object, f_env_05k2, track_dict) 
-        # R_p=radius_planet(M + 0.5*k2))
         k3 = (dt*Myr_to_sec * Mdot3)/M_earth
-        if np.iscomplex(k3):
-            print("Atmosphere has evaportated! Only bare rocky core left! STOP this madness!")
-            # if the stop criterium is reached, I add the core mass & core radius to the array at t_i+1
-            print("t = ", t_arr[-1]+dt)
-            t_arr.append(t_arr[-1]+dt)
-            M_arr.append(M_core)
-            print("M_core = ", M_core)
-            R_arr.append(R_core)
-            print("R_core = ", R_core)
-            Lx_arr.append(Lx_evo(t=t_arr[-1]+dt, track_dict=track_dict))            
-            return np.array(t_arr), np.array(M_arr), np.array(R_arr), np.array(Lx_arr)
-        ###############################################################################################################
         M_k3 = M + k3
         M_env_k3 = M_k3 - M_core
         f_env_k3 = (M_env_k3/M_k3)*100 # new mass fraction
         
         Mdot4 = mass_loss_rate_forward_LO14(t+dt, epsilon, K_on, beta_on, planet_object, f_env_k3, track_dict) 
-        # R_p=radius_planet(M + k3))
         k4 = (dt*Myr_to_sec * Mdot4)/M_earth
-        if np.iscomplex(k4):
-            print("Atmosphere has evaportated! Only bare rocky core left! STOP this madness!")
-            # if the stop criterium is reached, I add the core mass & core radius to the array at t_i+1
-            print("t = ", t_arr[-1]+dt)
-            t_arr.append(t_arr[-1]+dt)
-            M_arr.append(M_core)
-            print("M_core = ", M_core)
-            R_arr.append(R_core)
-            print("R_core = ", R_core)
-            Lx_arr.append(Lx_evo(t=t_arr[-1]+dt, track_dict=track_dict))            
-            return np.array(t_arr), np.array(M_arr), np.array(R_arr), np.array(Lx_arr)
-        ###############################################################################################################
 
+        ###########################################################################################
         M_lost = (k1 + 2*k2 + 2*k3 + k4)/6. # after time-step dt
         ###########################################################################################
+        
         # this part is new compared to the one used in the PAPER (there we used a fixed step size!)
         ###########################################################################################
         # if radius change is too drastic, decrease step size
@@ -244,11 +186,25 @@ def mass_planet_RK4_forward_LO14(epsilon, K_on, beta_on, planet_object, initial_
 
 
 def mass_planet_RK4_forward_LO14_PAPER(epsilon, K_on, beta_on, planet_object, initial_step_size, t_final, track_dict):
-    """USED: Runge-Kutta method to numerically integrate an ordinary differential equation by using a trial step at the 
-    midpoint of an interval to cancel out lower-order error terms.
-    -> Integrate from the current time (t_start (where planet has R0 and M0) into the future. 
-    *********I have sth like: Mdot = f(M_pl, Fxuv), and I want M_pl(t)*********
-    Note: M_star should be defined outside this function.""" 
+    """USED: 4th order Runge-Kutta as numerical integration  method 
+    Integrate from the current time (t_start (where planet has R0 and M0) into the future
+    taking into account photoevaporative mass loss. 
+
+    Input:
+    ----------
+    epsilon: evaporation efficiency
+    K_on: set use of K parameter on or off 
+    beta_on: set use of beta parameter on or off
+    planet_object: object of planet class which contains also stellar parameters 
+                   and info about stellar evo track
+    step_size: initial step_size, fixed 
+    t_final: final time of simulation
+    track_dict: dictionary with Lx evolutionary track parameters
+    
+    Output:
+    ----------
+    t_arr, M_arr, R_arr, Lx_arr: array of time, mass, radius and Lx values from t_start to t_final
+    """ 
     
     M_earth = const.M_earth.cgs.value
     R_earth = const.R_earth.cgs.value
@@ -309,38 +265,30 @@ def mass_planet_RK4_forward_LO14_PAPER(epsilon, K_on, beta_on, planet_object, in
         # calculation is embedded in the mass_loss_rate_fancy function)
         Lx_i = Lx_evo(t=t_arr[i], track_dict=track_dict)
         
-        ################
         ###############################################################################################################
         Mdot1 = mass_loss_rate_forward_LO14(times[i], epsilon, K_on, beta_on, planet_object, f_env, track_dict)
         k1 = (dt*Myr_to_sec * Mdot1)/M_earth # mass lost in one timestep in earth masses
-        ###############################################################################################################
         M_05k1 = M + 0.5*k1     
         M_env_05k1 = M_05k1 - M_core
         f_env_05k1 = (M_env_05k1/M_05k1)*100 # new mass fraction  
         
         Mdot2 = mass_loss_rate_forward_LO14(times[i]+0.5*dt, epsilon, K_on, beta_on, planet_object, f_env_05k1, track_dict)
-        #R_p=radius_planet(M + 0.5*k1))
         k2 = (dt*Myr_to_sec * Mdot2)/M_earth
-        ###############################################################################################################
         M_05k2 = M + 0.5*k2
         M_env_05k2 = M_05k2 - M_core
         f_env_05k2 = (M_env_05k2/M_05k2)*100 # new mass fraction
         
         Mdot3 = mass_loss_rate_forward_LO14(times[i]+0.5*dt, epsilon, K_on, beta_on, planet_object, f_env_05k2, track_dict) 
-        # R_p=radius_planet(M + 0.5*k2))
         k3 = (dt*Myr_to_sec * Mdot3)/M_earth
-        ###############################################################################################################
         M_k3 = M + k3
         M_env_k3 = M_k3 - M_core
         f_env_k3 = (M_env_k3/M_k3)*100 # new mass fraction
         
         Mdot4 = mass_loss_rate_forward_LO14(times[i]+dt, epsilon, K_on, beta_on, planet_object, f_env_k3, track_dict) 
-        # R_p=radius_planet(M + k3))
         k4 = (dt*Myr_to_sec * Mdot4)/M_earth
+        
         ###############################################################################################################
-        
         M_lost = (k1 + 2*k2 + 2*k3 + k4)/6. # after time-step dt 
-        
         ###############################################################################################################
         
         # check if planet with new mass does still have some atmosphere:
@@ -390,28 +338,30 @@ def mass_planet_RK4_forward_LO14_PAPER(epsilon, K_on, beta_on, planet_object, in
 ##################################################################################################################################
 
 def mass_planet_RK4_forward_Ot14(epsilon, K_on, beta_on, planet_object, initial_step_size, t_final, track_dict):
-    """USED: Runge-Kutta method to numerically integrate an ordinary differential equation by using a trial step at the 
-    midpoint of an interval to cancel out lower-order error terms.
-    -> Integrate from the current time (t_start (where planet has R0 and M0) into the future. 
-    *********I have sth like: Mdot = f(M_pl, Fxuv), and I want M_pl(t)*********
-    Note: M_star should be defined outside this function.
-    
-    planet_object contains all the initial parameters of the system, including M_star 
-    (but in solar units and this function needs it in cgs)
-    
-    Parameters:
+    """USED: 4th order Runge-Kutta as numerical integration  method 
+    Integrate from the current time (t_start (where planet has R0 and M0) into the future
+    taking into account photoevaporative mass loss. 
+
+    Input:
     ----------
-    Lx_evo:
-    mass_loss_rate_fancy_LO14:
-    calculate_planet_radius:
-    epsilon:
-    K_on:
-    beta_on, 
-    planet_object: planet object which contains also stellar parameters & info about stellar evo track
-    f_env_0: initial envelope mass fraction)
-    step_size: initial step_size (can be adjusted during calculation)
+    epsilon: evaporation efficiency
+    K_on: set use of K parameter on or off 
+    beta_on: set use of beta parameter on or off
+    planet_object: object of planet class which contains also stellar parameters 
+                   and info about stellar evo track
+    step_size: initial step_size, variable
+    [NOTE: the implementation of a variable step size is somewhat preliminary. The step size is adjusted 
+    (made smaller or bigger depending how fast or slow the mass/radius changes) until the final time step 
+    greater than t_final. This means that if the step size in the end is e.g. 10 Myr, and the integration 
+    is at 4999 Myr, then last time entry will be 4999+10 -> 5009 Myr.]
     t_final: final time of simulation
+    track_dict: dictionary with Lx evolutionary track parameters
+    
+    Output:
+    ----------
+    t_arr, M_arr, R_arr, Lx_arr: array of time, mass, radius and Lx values from t_start to t_final
     """ 
+    
     M_earth = const.M_earth.cgs.value
     R_earth = const.R_earth.cgs.value
     Myr_to_sec = 1e6*365*86400
@@ -447,9 +397,7 @@ def mass_planet_RK4_forward_Ot14(epsilon, K_on, beta_on, planet_object, initial_
     Lx_arr.append(Lx0)
     #print(M0, R0, t0)
     
-    ################
     # CRITERION when to stop the mass-loss
-    ################
     R_core = 2.15 # stop when this radius is reached! (this is the minimum radius for which the volatile regime is valid)
     M_core = plmoOt20.calculate_mass_planet_Ot19(R_core)
     
@@ -467,68 +415,26 @@ def mass_planet_RK4_forward_Ot14(epsilon, K_on, beta_on, planet_object, initial_
         ###############################################################################################################
         Mdot1 = mass_loss_rate_forward_Ot20(t, epsilon, K_on, beta_on, planet_object, R, track_dict) # mass M, radius R
         k1 = (dt*Myr_to_sec * Mdot1)/M_earth # mass lost in one timestep in earth masses
-        # check if this new planet would still be larger than core radius!
-        if np.iscomplex(k1):
-            print("STOP this madness! Leaving volatile regime!")
-            # if the stop criterium is reached, I add the core mass & core radius to the array at t_i+1
-            print("t = ", t_arr[-1]+dt)
-            t_arr.append(t_arr[-1]+dt)
-            M_arr.append(plmoOt20.calculate_planet_mass_Ot20(R_core))
-            R_arr.append(R_core)
-            Lx_arr.append(Lx_evo(t=t_arr[-1]+dt, track_dict=track_dict))            
-            return np.array(t_arr), np.array(M_arr), np.array(R_arr), np.array(Lx_arr)
-        ###############################################################################################################
         M_05k1 = M + 0.5*k1     
         R_05k1 = plmoOt20.calculate_radius_planet_Ot19(M_05k1)
         
         Mdot2 = mass_loss_rate_forward_Ot20(t+0.5*dt, epsilon, K_on, beta_on, planet_object, R_05k1, track_dict)
-        #R_p=radius_planet(M + 0.5*k1))
         k2 = (dt*Myr_to_sec * Mdot2)/M_earth
-        if np.iscomplex(k2):
-            print("STOP this madness! Leaving volatile regime!")
-            # if the stop criterium is reached, I add the core mass & core radius to the array at t_i+1
-            print("t = ", t_arr[-1]+dt)
-            t_arr.append(t_arr[-1]+dt)
-            M_arr.append(plmoOt20.calculate_planet_mass_Ot20(R_core))
-            R_arr.append(R_core)
-            Lx_arr.append(Lx_evo(t=t_arr[-1]+dt, track_dict=track_dict))            
-            return np.array(t_arr), np.array(M_arr), np.array(R_arr), np.array(Lx_arr)
-        ###############################################################################################################
         M_05k2 = M + 0.5*k2
         R_05k2 = plmoOt20.calculate_radius_planet_Ot19(M_05k2)
         
         Mdot3 = mass_loss_rate_forward_Ot20(t+0.5*dt, epsilon, K_on, beta_on, planet_object, R_05k2, track_dict) 
-        # R_p=radius_planet(M + 0.5*k2))
         k3 = (dt*Myr_to_sec * Mdot3)/M_earth
-        if np.iscomplex(k3):
-            print("STOP this madness! Leaving volatile regime!")
-            # if the stop criterium is reached, I add the core mass & core radius to the array at t_i+1
-            print("t = ", t_arr[-1]+dt)
-            t_arr.append(t_arr[-1]+dt)
-            M_arr.append(plmoOt20.calculate_planet_mass_Ot20(R_core))
-            R_arr.append(R_core)
-            Lx_arr.append(Lx_evo(t=t_arr[-1]+dt, track_dict=track_dict))            
-            return np.array(t_arr), np.array(M_arr), np.array(R_arr), np.array(Lx_arr)
-        ###############################################################################################################
         M_05k3 = M + 0.5*k3
         R_05k3 = plmoOt20.calculate_radius_planet_Ot19(M_05k3)
         
         Mdot4 = mass_loss_rate_forward_Ot20(t+dt, epsilon, K_on, beta_on, planet_object, R_05k3, track_dict) 
-        # R_p=radius_planet(M + k3))
         k4 = (dt*Myr_to_sec * Mdot4)/M_earth
-        if np.iscomplex(k4):
-            print("STOP this madness! Leaving volatile regime!")
-            # if the stop criterium is reached, I add the core mass & core radius to the array at t_i+1
-            print("t = ", t_arr[-1]+dt)
-            t_arr.append(t_arr[-1]+dt)
-            M_arr.append(plmoOt20.calculate_planet_mass_Ot20(R_core))
-            R_arr.append(R_core)
-            Lx_arr.append(Lx_evo(t=t_arr[-1]+dt, track_dict=track_dict))            
-            return np.array(t_arr), np.array(M_arr), np.array(R_arr), np.array(Lx_arr)
-        ###############################################################################################################
 
+        ###############################################################################
         M_lost = (k1 + 2*k2 + 2*k3 + k4)/6. # after time-step dt
         ###############################################################################
+        
         # this part is new compared to the one used in the PAPER
         ###############################################################################
         # if radius change is too drastic, decrease step size
@@ -588,8 +494,7 @@ def mass_planet_RK4_forward_Ot14(epsilon, K_on, beta_on, planet_object, initial_
 ##################################################################################################################################
 
 
-def mass_planet_RK4_forward_Ot14_PAPER(epsilon, K_on, beta_on, planet_object, 
-                                       initial_step_size, t_final, track_dict):
+def mass_planet_RK4_forward_Ot14_PAPER(epsilon, K_on, beta_on, planet_object, initial_step_size, t_final, track_dict):
     """USED: 4th order Runge-Kutta as numerical integration  method 
     Integrate from the current time (t_start (where planet has R0 and M0) into the future
     taking into account photoevaporative mass loss. 
@@ -601,14 +506,15 @@ def mass_planet_RK4_forward_Ot14_PAPER(epsilon, K_on, beta_on, planet_object,
     beta_on: set use of beta parameter on or off
     planet_object: object of planet class which contains also stellar parameters 
                    and info about stellar evo track
-    f_env_0: initial envelope mass fraction
     step_size: initial step_size, fixed
     t_final: final time of simulation
+    track_dict: dictionary with Lx evolutionary track parameters
     
     Output:
     ----------
     t_arr, M_arr, R_arr, Lx_arr: array of time, mass, radius and Lx values from t_start to t_final
     """ 
+    
     M_earth = const.M_earth.cgs.value
     R_earth = const.R_earth.cgs.value
     Myr_to_sec = 1e6*365*86400
@@ -665,26 +571,23 @@ def mass_planet_RK4_forward_Ot14_PAPER(epsilon, K_on, beta_on, planet_object,
         ###############################################################################################################
         Mdot1 = mass_loss_rate_forward_Ot20(times[i], epsilon, K_on, beta_on, planet_object, R, track_dict) # mass M, radius R
         k1 = (dt*Myr_to_sec * Mdot1)/M_earth # mass lost in one timestep in earth masses
-        ###############################################################################################################
         M_05k1 = M + 0.5*k1     
         R_05k1 = plmoOt20.calculate_radius_planet_Ot19(M_05k1)
         
         Mdot2 = mass_loss_rate_forward_Ot20(times[i]+0.5*dt, epsilon, K_on, beta_on, planet_object, R_05k1, track_dict)
         k2 = (dt*Myr_to_sec * Mdot2)/M_earth
-        ###############################################################################################################
         M_05k2 = M + 0.5*k2
         R_05k2 = plmoOt20.calculate_radius_planet_Ot19(M_05k2)
         
         Mdot3 = mass_loss_rate_forward_Ot20(times[i]+0.5*dt, epsilon, K_on, beta_on, planet_object, R_05k2, track_dict) 
         k3 = (dt*Myr_to_sec * Mdot3)/M_earth
-        ###############################################################################################################
         M_05k3 = M + 0.5*k3
         R_05k3 = plmoOt20.calculate_radius_planet_Ot19(M_05k3)
         
         Mdot4 = mass_loss_rate_forward_Ot20(times[i]+dt, epsilon, K_on, beta_on, planet_object, R_05k3, track_dict) 
         k4 = (dt*Myr_to_sec * Mdot4)/M_earth
-        ###############################################################################################################
 
+        ###############################################################################################################
         M_lost = (k1 + 2*k2 + 2*k3 + k4)/6. # mass lost after time-step dt
         ###############################################################################################################
 

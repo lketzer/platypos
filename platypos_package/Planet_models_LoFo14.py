@@ -3,6 +3,12 @@ import astropy.units as u
 from astropy import constants as const
 import numpy as np
 
+
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+# ignoring this warining is certainly not the best way, but it is currently thrown when one of the "in-between"
+# time steps inside the Runge-Kutta integration method results in a planet which has no atmosphere left.
+    
 def calculate_core_radius(M_core):
     """ M-R relation for rock/iron Earth-like core. (no envelope) """
     R_core = (M_core**0.25)
