@@ -1,7 +1,7 @@
 import os
 
 PACKAGEDIR = os.path.abspath(os.path.dirname(__file__))
-name = 'plaml_package'
+name = 'platypos_package'
 
 import logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
