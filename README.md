@@ -2,7 +2,7 @@
 Tool to estimate the atmospheric mass loss of planets induced by the stellar X-ray and extreme UV irradiance. 
 
 ![](./supplementary_files/platypos3_crop.png)
-<p style='text-align: right;'> Credit: AIP/J. Fohlmeister </p>
+                                                                            Credit: AIP/J. Fohlmeister
 
 ## Our Model Assumptions
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
