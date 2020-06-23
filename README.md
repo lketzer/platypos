@@ -2,8 +2,7 @@
 Tool to estimate the atmospheric mass loss of planets induced by the stellar X-ray and extreme UV irradiance. 
 
 ![](./supplementary_files/platypos3_crop.png)
-<p align="right"> *Credit: AIP/J. Fohlmeister* </p>
-
+<p align="right"> Credit: AIP/J. Fohlmeister </p>
 
 ## Our Model Assumptions
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
@@ -50,5 +49,6 @@ To be implemented...
                          Jackson et al., 2012 sample of X-ray measurements in young clusters)
 
 * **example_V1298Tau**: contains a notebook to reproduce the results from the paper *X-ray irradiation and evaporation of the four young planets around V1298 Tau* (Poppenhaeger, Ketzer, Mallonn, 2020)
+[Link to our paper: ](https://arxiv.org/abs/2005.10240)
 
 * **population_evolution**: evolve a whole population of planets (to be implemented in the future)
