@@ -2,9 +2,7 @@
 Tool to estimate the atmospheric mass loss of planets induced by the stellar X-ray and extreme UV irradiance. 
 
 ![](./supplementary_files/platypos3_crop.png)
-<p align="right">
-   Credit: AIP/J. Fohlmeister
-</p>
+<p align="right"> *Credit: AIP/J. Fohlmeister* </p>
 
 
 ## Our Model Assumptions
