@@ -1,7 +1,7 @@
 # PLATYPOS - PLAneTarY PhOtoevaporation Simulator
 Tool to estimate the atmospheric mass loss of planets induced by the stellar X-ray and extreme UV irradiance. 
 
-![](./supplementary_files/Platypos_logo.png)
+![](./supplementary_files/platypos3_crop.png)
 
 ## Our Model Assumptions
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
