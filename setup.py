@@ -5,10 +5,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 # read in required packages from requirements.txt
-with open("requirements.txt", "r") as fr:
-    tmp = fr.readlines()
-    # remove '\n'
-    requirements = [package[:-1] for package in tmp]
+with open("requirements.txt", "r") as fh:
+    requirements = fh.read().splitlines()
 
 #get version number
 from subprocess import Popen, PIPE
@@ -23,7 +21,7 @@ except:
 # set up setuptools
 setuptools.setup(
     name="platypos",
-    version="1.1",
+    version="1.1.16",
     author='Laura Ketzer',
     author_email='lketzer@aip.de',
     description='PLAneTarY PhOtoevaporation Simulator',
@@ -35,7 +33,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        'Development Status :: 2 - Pre-Alpha', # 3 - Alpha, 4 - Beta, 5 - Production/Stable, 6 - Mature, 7 - Inactive (1 - Planning)
+        'Development Status :: 3 - Alpha', # 2 - Pre-Alpha, # 3 - Alpha, 4 - Beta, 5 - Production/Stable, 6 - Mature, 7 - Inactive (1 - Planning)
         'Environment :: Console',
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
