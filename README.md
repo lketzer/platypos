@@ -44,16 +44,15 @@ These "mature" relationships show two regimes, one for small rocky planets up to
 To be implemented...
 
 
-## Additional:
+### Additional Info:
 
-* **supplementary_files**: Contains some extra files for plotting; 
-                           Tu et al. (2015)<sup>[4](#Tu-et-al-15)</sup> model tracks for the X-ray luminosity evolution, 
+* **supplementary_files**: Contains some extra files for plotting; <br>
+                           Tu et al. (2015)<sup>[4](#Tu-et-al-15)</sup> model tracks for the X-ray luminosity evolution,  <br>
                            Jackson et al. (2012)<sup>[10](#Jackson-et-al-12)</sup> sample of X-ray measurements in young clusters)
 
-* **examples**: Two example notebooks which show how to use playpos. Evolve the four young V1298 Tau planets as shown in *X-ray irradiation and evaporation of the 		   four young planets around V1298 Tau* (Poppenhaeger, Ketzer, Mallon 2020)<sup>[11](#Poppenhaeger-et-al-20)</sup> <br>
+* **examples**: Two example notebooks which show how to use `playpos`.  <br>
+		Evolve the four young V1298 Tau planets as shown in *X-ray irradiation and evaporation of the four young planets around V1298 Tau* (Poppenhaeger, 		  Ketzer, Mallon 2020)<sup>[11](#Poppenhaeger-et-al-20)</sup> <br>
 		NOTE: for the V1298Tau notebook, you also need the package `multi_track`. 
-
-* **population_evolution**: evolve a whole population of planets (to be fully implemented in the future)
 
 
 ## References:
