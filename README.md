@@ -1,20 +1,62 @@
 # PLATYPOS - PLAneTarY PhOtoevaporation Simulator
 Tool to estimate the atmospheric mass loss of planets induced by the stellar X-ray and extreme UV irradiance. 
 
-
 ![](./supplementary_files/platypos3_2_best.png)
 
 ## Installation
 
-`cd /Path/
+Create a virtual environment:
+
+```bash
+cd /Path/
 python3 -m venv venv/
-source venv/bin/activate`
+source venv/bin/activate
+```
 
-Install ```platypos``` through pip
+Install ```platypos``` through pip:
 
-`pip install platypos`
+```bash
+pip install platypos
+```
 
+## Quickstart
 
+Open a jupyter notebook:
+```bash
+python3 -m notebook
+from platypos import Planet_LoFo14
+from Platypos import Planet_Ot20
+```
+
+To create a planet object you need to specify several things: <br>
+1) `host_star_params = {'star_id': 'star1', 'mass': mass_star, 'radius': radius_star, 'age': age_star, 'L_bol': L_bol, 'Lx_age': Lx_at_star_age}` <br>
+2) `stellar_evolutionary_track = {'t_start': 20. (Myr), 't_sat': 100., 't_curr': 1000., 't_5Gyr': 5000., 'Lx_max': Lx_saturation, 
+         			 'Lx_curr': Lx_1Gyr, 'Lx_5Gyr': Lx_5Gyr, 'dt_drop': 0., 'Lx_drop_factor': 0.}}` <br>
+
+e.g for solar-mass star, based on Tu et al. 2015, Lx_1Gyr and Lx_5Gyr should be set to 
+<img src="https://render.githubusercontent.com/render/math?math=2.10*10**28"> and <img src="https://render.githubusercontent.com/render/math?math=1.65*10**27"> [erg/s]. <br>
+
+3) `planet_params1 = {'radius': 5.59, 'distance': 0.0825, 'core_mass': 5.0, , 'metallicity': "solarZ"}` <br>
+`planet_params2 = {'radius': 5.59, 'distance': 0.0825}` <br>
+
+4) Create the planet object
+`pl = Planet_LoFo14(star_params, planet_params1)` <br>
+`pl = Planet_Ot20(star_params, planet_params2)` <br>
+
+5) Specify additional parameters for the platypos run
+- beta and K on or off? `"on"` or `"off"`
+- evaporation efficiency: epsilon
+- end time of simulation: t_final
+- initial step size: init_dt
+- track to evolve star-planet system along: track
+- path to save results: path_save
+- folder in path_save to save results in: folder_id
+
+4) Evolve the planet along defined track:
+`pl.evolve_forward_and_create_full_output(t_final, init_dt, epsilon, "yes", "yes", track, path_save, folder_id) `
+
+5) Look at Results:
+`df_pl = pl.read_results(path_save)`
 
 ## Our Model Assumptions
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
