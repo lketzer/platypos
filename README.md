@@ -59,7 +59,9 @@ To be implemented...
 * **population_evolution**: evolve a whole population of planets (to be fully implemented in the future)
 
 
-## References:
+## References<sup>[1](#Poppenhaeger-et-al-20)</sup>:
+
+<a name="Poppenhaeger-et-al-20">1</a>: Footnote content goes here
 
 [^Poppenhaeger-et-al-20]: [Poppenhaeger, Ketzer, Mallon 2020](https://arxiv.org/abs/2005.10240)
 [^Erkaev-et-al-07]: [Erkaev et al. 2007](https://arxiv.org/abs/astro-ph/0612729)
