@@ -4,6 +4,17 @@ Tool to estimate the atmospheric mass loss of planets induced by the stellar X-r
 
 ![](./supplementary_files/platypos3_2_best.png)
 
+## Installation
+
+`cd /Path/
+python3 -m venv venv/
+source venv/bin/activate`
+
+Install ```platypos``` through pip
+
+`pip install platypos`
+
+
 
 ## Our Model Assumptions
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
