@@ -54,16 +54,15 @@ To be implemented...
                            Jackson et al. (2012)[^Jackson-et-al-12] sample of X-ray measurements in young clusters)
 
 * **example_V1298Tau**: evolve the four young V1298 Tau planets as shown in "X-ray irradiation and evaporation of the four young planets around V1298 Tau" 
-			(Poppenhaeger, Ketzer, Mallon 2020)[^Poppenhaeger-et-al-20]
+			(Poppenhaeger, Ketzer, Mallon 2020)<sup>[1](#Poppenhaeger-et-al-20)</sup>
 
 * **population_evolution**: evolve a whole population of planets (to be fully implemented in the future)
 
 
-## References<sup>[1](#Poppenhaeger-et-al-20)</sup>:
+## References:
 
-<a name="Poppenhaeger-et-al-20">1</a>: Footnote content goes here
+<a name="Poppenhaeger-et-al-20">1</a>: [Poppenhaeger, Ketzer, Mallon 2020](https://arxiv.org/abs/2005.10240)
 
-[^Poppenhaeger-et-al-20]: [Poppenhaeger, Ketzer, Mallon 2020](https://arxiv.org/abs/2005.10240)
 [^Erkaev-et-al-07]: [Erkaev et al. 2007](https://arxiv.org/abs/astro-ph/0612729)
 [^Lopez-Fortney-14]: [Lopez & Fortney 2014](https://arxiv.org/abs/1311.0329)
 [^Jackson-et-al-12]: [Jackson et al. 2012](https://arxiv.org/abs/1111.0031)
