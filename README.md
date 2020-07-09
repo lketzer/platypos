@@ -44,32 +44,28 @@ These "mature" relationships show two regimes, one for small rocky planets up to
 To be implemented...
 
 
-## Repository Structure:
+## Additional:
 
-* **platypos_package**: contains the planet classes & all the necessary funtions to construct a planet and make it evolve 
-                        (LoF014 planet with rocky core & gaseous envelope OR planet based on mass-radius relation for mature planets (Ot20))
-
-* **supplementary_files**: contains some extra files for plotting; 
+* **supplementary_files**: Contains some extra files for plotting; 
                            Tu et al. (2015)[^Tu-et-al-15] model tracks for the X-ray luminosity evolution, 
                            Jackson et al. (2012)[^Jackson-et-al-12] sample of X-ray measurements in young clusters)
 
-* **example_V1298Tau**: evolve the four young V1298 Tau planets as shown in "X-ray irradiation and evaporation of the four young planets around V1298 Tau" 
-			(Poppenhaeger, Ketzer, Mallon 2020)<sup>[1](#Poppenhaeger-et-al-20)</sup>
+* **examples**: Two example notebooks which show how to use playpos. Evolve the four young V1298 Tau planets as shown in "X-ray irradiation and evaporation of the 		   four young planets around V1298 Tau" (Poppenhaeger, Ketzer, Mallon 2020)<sup>[1](#Poppenhaeger-et-al-20)</sup>
+		NOTE: for the V1298Tau notebook, you also need the package `multi_track`. 
 
 * **population_evolution**: evolve a whole population of planets (to be fully implemented in the future)
 
 
 ## References:
 
-<a name="Poppenhaeger-et-al-20">1</a>: [Poppenhaeger, Ketzer, Mallon 2020](https://arxiv.org/abs/2005.10240)
-
-[^Erkaev-et-al-07]: [Erkaev et al. 2007](https://arxiv.org/abs/astro-ph/0612729)
-[^Lopez-Fortney-14]: [Lopez & Fortney 2014](https://arxiv.org/abs/1311.0329)
-[^Jackson-et-al-12]: [Jackson et al. 2012](https://arxiv.org/abs/1111.0031)
-[^Chen-Kipping-2017]: [Chen & Kipping 2017](https://arxiv.org/abs/1603.08614)
-[^Otegi-et-al-2020]: [Otegi et al. 2020](https://arxiv.org/abs/1911.04745)
-[^Barnes-03]: [Barnes 2003](https://arxiv.org/abs/astro-ph/0303631)
-[^Matt-et-al-12]: [Matt et al. 2012](https://arxiv.org/abs/1206.2354)
-[^Tu-et-al-15]: [Tu et al. 2015](https://arxiv.org/abs/2005.10240)
-[^Johnstone-et-al-2015]: [Johnstone et al. 2015](https://arxiv.org/abs/1503.07494)
-[^Garaffo-et-al-2018]: [Garaffo et al. 2018](https://arxiv.org/abs/1804.01986)
+<a name="Erkaev-et-al-07">1</a>: [Erkaev et al. 2007](https://arxiv.org/abs/astro-ph/0612729)
+<a name="Barnes-03">2</a>: [Barnes 2003](https://arxiv.org/abs/astro-ph/0303631)
+<a name="Matt-et-al-12">3</a>: [Matt et al. 2012](https://arxiv.org/abs/1206.2354)
+<a name="Tu-et-al-15">4</a>: [Tu et al. 2015](https://arxiv.org/abs/2005.10240)
+<a name="Garaffo-et-al-2018">5</a>: [Garaffo et al. 2018](https://arxiv.org/abs/1804.01986)
+<a name="Johnstone-et-al-2015">6</a>: [Johnstone et al. 2015](https://arxiv.org/abs/1503.07494)
+<a name="Lopez-Fortney-14">7</a>: [Lopez & Fortney 2014](https://arxiv.org/abs/1311.0329)
+<a name="Chen-Kipping-2017">8</a>: [Chen & Kipping 2017](https://arxiv.org/abs/1603.08614)
+<a name="Otegi-et-al-2020">9</a>: [Otegi et al. 2020](https://arxiv.org/abs/1911.04745)
+<a name="Jackson-et-al-12">10</a>: [Jackson et al. 2012](https://arxiv.org/abs/1111.0031)
+<a name="Poppenhaeger-et-al-20">11</a>: [Poppenhaeger, Ketzer, Mallon 2020](https://arxiv.org/abs/2005.10240)
