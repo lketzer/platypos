@@ -1,0 +1,2 @@
+from platypos.planet_LoFo14 import Planet_LoFo14
+from platypos.planet_Ot20 import Planet_Ot20
