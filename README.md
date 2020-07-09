@@ -117,6 +117,8 @@ df_pl = pl.read_results(path_save)
 
 ### Additional Info:
 
+* For more details go into the source code. Lots of comments there.
+
 * **supplementary_files**: Contains some extra files for plotting; <br>
                            Tu et al. (2015)<sup>[4](#Tu-et-al-15)</sup> model tracks for the X-ray luminosity evolution,  <br>
                            Jackson et al. (2012)<sup>[10](#Jackson-et-al-12)</sup> sample of X-ray measurements in young clusters)
