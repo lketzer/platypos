@@ -63,8 +63,11 @@ To be implemented...
 Open a jupyter notebook:
 ```bash
 python3 -m notebook
+```
+and import `platypos`: 
+```python
 from platypos import Planet_LoFo14
-from Platypos import Planet_Ot20
+from platypos import Planet_Ot20
 ```
 
 To create a planet object you need to specify several things: <br>
