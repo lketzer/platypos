@@ -95,8 +95,8 @@ planet_params2 = {'radius': 5.59, 'distance': 0.0825}
 
 4) Create the planet object <br>
 ```python
-pl = Planet_LoFo14(star_params, planet_params1)
-pl = Planet_Ot20(star_params, planet_params2)
+pl = Planet_LoFo14(host_star_params, planet_params1)
+pl = Planet_Ot20(host_star_params, planet_params2)
 ```
 
 5) Specify additional parameters for the platypos run <br>
