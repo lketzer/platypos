@@ -104,13 +104,16 @@ pl = Planet_Ot20(host_star_params, planet_params2)
 	- evaporation efficiency: epsilon
 	- end time of simulation: t_final
 	- initial step size: init_dt
-	- track to evolve star-planet system along: track
+	- track to evolve star-planet system along: stellar_evolutionary_track
 	- path to save results: path_save
 	- folder in path_save to save results in: folder_id
 
 4) Evolve the planet along defined track: <br>
 ```python
-pl.evolve_forward_and_create_full_output(t_final, init_dt, epsilon, "yes", "yes", track, path_save, folder_id)
+pl.evolve_forward_and_create_full_output(t_final, init_dt, epsilon, 
+					 "yes", "yes", 
+					 stellar_evolutionary_track, 
+					 path_save, folder_id)
 ```
 
 5) Look at Results: <br>
