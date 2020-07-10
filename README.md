@@ -89,7 +89,7 @@ stellar_evolutionary_track = {'t_start': 20. (Myr), 't_sat': 100., 't_curr': 100
 
 3) Specify the planet parameters <br>
 ```python
-planet_params1 = {'radius': 5.59, 'distance': 0.0825, 'core_mass': 5.0, , 'metallicity': "solarZ"}
+planet_params1 = {'radius': 5.59, 'distance': 0.0825, 'core_mass': 5.0, 'metallicity': "solarZ"}
 planet_params2 = {'radius': 5.59, 'distance': 0.0825}
 ```
 
