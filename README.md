@@ -5,7 +5,7 @@ Tool to estimate the atmospheric mass loss of planets induced by stellar X-ray a
 
 ## Installation
 
-NOTE: 'pip install platypos' installs an old version. Better to clone and use the *platypos_newest_release* branch for now
+**NOTE: 'pip install platypos' installs an old version. Better to clone and use the *platypos_newest_release* branch for now!**
 
 Create a virtual environment:
 
