@@ -113,7 +113,7 @@ pl = Planet_Ot20(host_star_params, planet_params2)
 	- relation for estimating the EUV content based on X-rays: relation_EUV="Linsky" or "SanzForcada"
 	- mass-loss-rate calculation method: mass_loss_calc="Elim" or "Elim_and_RRlim" or "HBA"
 	- extrapolate beyond lower envelope mass fraction boarder of the models: fenv_sample_cut=False
-	- 
+	
 **NOTE**: The docstrings ususally contain detailed information on all these parameters! Check them out if you're interested.
 
 
