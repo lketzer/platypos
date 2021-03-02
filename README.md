@@ -5,24 +5,19 @@ Tool to estimate the atmospheric mass loss of planets induced by stellar X-ray a
 
 ## Installation
 
-Create a virtual environment:
-
-```bash
-cd /Path/
-python3 -m venv venv/
-source venv/bin/activate
-```
-
-Install ```platypos``` through pip:
-
-```bash
-pip install platypos
-```
+Download the *platypos_newest_release* branch.
 
 ## Our Model Assumptions
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
 
 ### Mass-loss description: <br> 
+
+We have expanded the code to include:
+- Energy-limited mass-loss rates
+- Radiation-recombination limited mass-loss rates (e.g. Murray-Clay et al. 2009, Lopez & Rice 2017)
+- "hydro-based" mass-loss rates (by Kubishkina et al. 2019)
+
+Energy-limited:
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\dot{M}&space;=&space;\epsilon&space;\frac{(\pi&space;R_{XUV}^2)&space;F_{\mathrm{XUV}}}{K&space;G&space;M_{pl}/R_{pl}&space;}&space;=&space;\epsilon&space;\frac{3&space;\beta^2&space;F_{\mathrm{XUV}}}{4&space;G&space;K&space;\rho_{pl}}\,," target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\dot{M}&space;=&space;\epsilon&space;\frac{(\pi&space;R_{XUV}^2)&space;F_{\mathrm{XUV}}}{K&space;G&space;M_{pl}/R_{pl}&space;}&space;=&space;\epsilon&space;\frac{3&space;\beta^2&space;F_{\mathrm{XUV}}}{4&space;G&space;K&space;\rho_{pl}}\,," title="\small \dot{M} = \epsilon \frac{(\pi R_{XUV}^2) F_{\mathrm{XUV}}}{K G M_{pl}/R_{pl} } = \epsilon \frac{3 \beta^2 F_{\mathrm{XUV}}}{4 G K \rho_{pl}}\,," /></a>
 
 where 
@@ -45,12 +40,15 @@ Most previous studies of exoplanet evaporation approximate the stellar XUV evolu
 
 
 ### Planet Model description: <br>
-At the moment, the user can choose between two planet models.
+The user can choose between three planet models.
 
-1. *Planet with a rocky core and H/He envelope atop* <br>
+1. *Planet with a rocky core and H/He envelope atop (LoFo14)* <br>
 We use the tabulated models of Lopez & Fortney (2014)<sup>[7](#Lopez-Fortney-14)</sup>, who calculate radii for low-mass planets with hydrogen-helium envelopes on top of Earth-like rocky cores, taking into account the cooling and thermal contraction of the atmospheres of such planets over time. Their simulations extend to young planetary ages, at which planets are expected to still be warm and possibly inflated. Simple analytical fits to their simulation results are provided, which we use to trace the thermal and photoevaporative evolution of the planetary radius over time.
 
-1. *Planet which follows the empirical mass-radius relationships observed for planets around older stars* <br> 
+1. *Planet with a rocky core and H/He envelope atop (ChRo16)* <br>
+We use the analytical fits of the mass-radius-age relation for planets with rocky cores and H/He envelopes by Chen & Rogers (2016). They use MESA to model the planetary radius evolution over time.
+
+1. *Planet which follows the empirical mass-radius relationships observed for planets around older stars (Ot20)* <br> 
 (see Otegi et al. (2020)<sup>[8](#Otegi-et-al-2020)</sup>, also Chen & Kipping (2017)<sup>[9](#Chen-Kipping-2017)</sup>) <br>
 These "mature" relationships show two regimes, one for small rocky planets up to radii of about 2 Earth radii and one for larger planets with volatile-rich envelopes. The scatter is low in the rocky planet regime and larger in the gaseous planet regime: as core vs. envelope fractions may vary, there is a broader range of observed masses at a given planetary radius for those larger planets. 
 
@@ -66,7 +64,9 @@ python3 -m notebook
 ```
 and import `platypos`: 
 ```python
+
 from platypos import Planet_LoFo14
+from platypos import Planet_ChRo16
 from platypos import Planet_Ot20
 ```
 
@@ -91,29 +91,39 @@ stellar_evolutionary_track = {'t_start': 20. (Myr), 't_sat': 100., 't_curr': 100
 ```python
 planet_params1 = {'radius': 5.59, 'distance': 0.0825, 'core_mass': 5.0, 'metallicity': "solarZ"}
 planet_params2 = {'radius': 5.59, 'distance': 0.0825}
+planet_params1_ = {'radius': 5.59, 'distance': 0.0825, 'core_mass': 5.0, 'core_comp': "rock"}
 ```
 
 4) Create the planet object <br>
 ```python
 pl = Planet_LoFo14(host_star_params, planet_params1)
+pl = Planet_ChRo16(host_star_params, planet_params1_)
 pl = Planet_Ot20(host_star_params, planet_params2)
 ```
 
 5) Specify additional parameters for the platypos run <br>
-	- beta and K on (or off)? `"yes"` or `"no"`
+	- K on (or off)? K_on=`"yes"` or `"no"`
+	- beta: need dictionary with beta settings (e.g. beta_settings={}
 	- evaporation efficiency: epsilon
 	- end time of simulation: t_final
-	- initial step size: init_dt
+	- initial step size: initial_step_size
 	- track to evolve star-planet system along: stellar_evolutionary_track
 	- path to save results: path_save
 	- folder in path_save to save results in: folder_id
+	- relation for estimating the EUV content based on X-rays: relation_EUV="Linsky" or "SanzForcada"
+	- mass-loss-rate calculation method: mass_loss_calc="Elim" or "Elim_and_RRlim" or "HBA"
+	- extrapolate beyond lower envelope mass fraction boarder of the models: fenv_sample_cut=False
+	- 
+**NOTE**: The docstrings ususally contain detailed information on all these parameters! Check them out if you're interested.
+
 
 4) Evolve the planet along defined track: <br>
 ```python
-pl.evolve_forward_and_create_full_output(t_final, init_dt, epsilon, 
-					 "yes", "yes", 
+pl.evolve_forward_and_create_full_output(t_final, initial_step_size, epsilon,
+					 K_on, beta_settings,
 					 stellar_evolutionary_track, 
-					 path_save, folder_id)
+					 path_save, folder_id,
+					 relation_EUV, mass_loss_calc, fenv_sample_cut)
 ```
 
 5) Look at Results: <br>
@@ -131,7 +141,7 @@ df_pl = pl.read_results(path_save)
 
 * **examples**: Two example notebooks which show how to use `playpos`.  <br>
 		Evolve the four young V1298 Tau planets as shown in *X-ray irradiation and evaporation of the four young planets around V1298 Tau* (Poppenhaeger, 		  Ketzer, Mallon 2020)<sup>[11](#Poppenhaeger-et-al-20)</sup> <br>
-		NOTE: for the V1298Tau notebook, you also need the package `multi_track`. 
+		NOTE: for the V1298Tau notebook, you also need the package `multitrack`. 
 
 
 ## References:
