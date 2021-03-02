@@ -103,7 +103,7 @@ pl = Planet_Ot20(host_star_params, planet_params2)
 
 5) Specify additional parameters for the platypos run <br>
 	- K on (or off)? K_on=`"yes"` or `"no"`
-	- beta: need dictionary with beta settings (e.g. beta_settings={}
+	- beta: need dictionary with beta settings (e.g. beta_settings = {"beta_calc": "off"}
 	- evaporation efficiency: epsilon
 	- end time of simulation: t_final
 	- initial step size: initial_step_size
