@@ -25,16 +25,9 @@ pip install platypos
 ```
 
 ## Our Model Assumptions
-We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with a hydrodynamic escape model to estimate the mass-loss rate over time. 
+We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time. 
 
 ### Mass-loss description: <br> 
-
-Currently, there are three different mass-loss rate estimations available:
-1) Energy-limited escape
-2) Radiation-Recombination-limited escape
-3) "Hydro-based" mass-loss rate approximations by Kubyshkina et al. (2018)<sup>[4](#Kubyshkina-et-al-18)</sup>
-
-**Energy-limited escape** <br> 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\dot{M}&space;=&space;\epsilon&space;\frac{(\pi&space;R_{XUV}^2)&space;F_{\mathrm{XUV}}}{K&space;G&space;M_{pl}/R_{pl}&space;}&space;=&space;\epsilon&space;\frac{3&space;\beta^2&space;F_{\mathrm{XUV}}}{4&space;G&space;K&space;\rho_{pl}}\,," target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\dot{M}&space;=&space;\epsilon&space;\frac{(\pi&space;R_{XUV}^2)&space;F_{\mathrm{XUV}}}{K&space;G&space;M_{pl}/R_{pl}&space;}&space;=&space;\epsilon&space;\frac{3&space;\beta^2&space;F_{\mathrm{XUV}}}{4&space;G&space;K&space;\rho_{pl}}\,," title="\small \dot{M} = \epsilon \frac{(\pi R_{XUV}^2) F_{\mathrm{XUV}}}{K G M_{pl}/R_{pl} } = \epsilon \frac{3 \beta^2 F_{\mathrm{XUV}}}{4 G K \rho_{pl}}\,," /></a>
 
 where 
@@ -52,14 +45,8 @@ the density of the planet,
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\epsilon" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\epsilon" title="\small \epsilon" /></a>
 is the efficiency of the atmospheric escape with a value between 0 and 1, and K is a factor representing the impact of Roche lobe overflow (Erkaev et al. 2007)<sup>[1](#Erkaev-et-al-07)</sup>, which can take on values of 1 for no Roche lobe influence and <1 for planets filling significant fractions of their Roche lobes.
 
-**Radiation-Recombination-limited escape** <br>
-add info!
 
-**"Hydro-based" mass-loss rates** <br>
-See Kubyshkina et al. (2018)<sup>[4](#Kubyshkina-et-al-18)</sup> for the moment.
-
-
-### Stellar high-energy evolution <br>
+**Stellar high-energy evolution** <br>
 Most previous studies of exoplanet evaporation approximate the stellar XUV evolution by using the average activity level of stars in a specific mass bin for well-studied clusters of different ages, and approximating it with a broken power-law with a 100 Myr-long saturation regime. Observations and theoretical studies show, however, that stars spin down at a wider range of ages (see Barnes 2003<sup>[2](#Barnes-03)</sup>, Matt et al. 2012<sup>[3](#Matt-et-al-12)</sup>, Tu et al. 2015<sup>[4](#Tu-et-al-15)</sup>, Garaffo et al. 2018<sup>[5](#Garaffo-et-al-2018)</sup>). In the context of exoplanet irradiation, this was explored in simulations by Tu et al. (2015)<sup>[4](#Tu-et-al-15)</sup> and Johnstone et al. (2015)<sup>[6](#Johnstone-et-al-2015)</sup>. Their studies show that the saturation timescales can range from ~10 to 300 Myr for solar-mass stars. Hence, a star that spins down quickly will follow a low-activity track, while a star that can maintain its rapid rotation will follow a high-activity track. This translates into significantly different irradiation levels for exoplanets, and thus the amount and strength of evaporation. Based on the findings by Tu et al. (2015), we generate a more realistic stellar activity evolution of the host star by adopting a broken power-law model with varying saturation and spin-down time scales to approximate a low-, medium- and high-activity scenario for the host star.
 
 
