@@ -9,7 +9,8 @@ from scipy.optimize import fsolve
 import scipy.optimize as optimize
 
 from platypos.lx_evo_and_flux import flux_at_planet, flux_at_planet_earth
-from platypos.mass_evolution_function import mass_planet_RK4_forward_Ot20
+from platypos.mass_evolution_function import mass_evo_RK4_forward
+
 
 class Planet_Ot20():
     """
@@ -19,35 +20,86 @@ class Planet_Ot20():
                                    'age': age_star, 
                                    'L_bol': L_bol, 
                                    'Lx_age': Lx_age}
-    Structure of planet_dict: {"radius": r_p, distance": a}
+    Structure of planet_dict: {"radius": R_p, distance": a} or
+                              {"mass": M_p, distance": a}
     """
 
-    def __init__(self, star_dictionary, planet_dict, Lx_sat_info=None):
+    def __init__(self, star_dictionary, planet_dict,
+                 Lx_sat_info=None, Lx_sat_Lbol=None):
         '''Initialize a new instance (=object) of Planet_Ot20
 
         '''
 
         # initialize stellar parameters
-        self.star_id = star_dictionary['star_id']
+        try:
+            self.star_id = star_dictionary['star_id']
+        except:
+            self.star_id = "noname"
+        try:
+            self.radius_star = star_dictionary['radius']
+        except:
+            self.radius_star = "None"
+
         self.mass_star = star_dictionary['mass']
-        self.radius_star = star_dictionary['radius']
         self.age = star_dictionary['age']
         self.Lbol = star_dictionary['L_bol'] * const.L_sun.cgs.value
+        self.Lbol_solar = star_dictionary['L_bol']
         self.Lx_age = star_dictionary['Lx_age']
+        try:
+            self.Lx_sat_info = star_dictionary['Lx_sat_info']
+            self.Lx_sat_Lbol = star_dictionary['Lx_sat_Lbol']
+        except:
+            self.Lx_sat_info = Lx_sat_info
+            self.Lx_sat_Lbol = Lx_sat_Lbol
         
         # initialize planet
         # -> based on observed radius, we estimate the mass from M-R relation
         # following params are the same for all planets!
         self.distance = planet_dict["distance"]
         self.flux = flux_at_planet_earth(self.Lbol, self.distance)
+        self.flux_cgs = flux_at_planet(self.Lbol, self.distance)
         self.has_evolved = False # flag which tracks if planet has been 
                                  # evolved and result file exists
         self.planet_id = "dummy" # set planet name later with set_name
+        # I add this extra flag to test a planet object for its class type
+        self.planet_type = "Ot20"
         
-        self.radius = planet_dict["radius"]
-        self.mass_planet_Ot20()
-        self.Lx_sat_info = Lx_sat_info
+        try:
+            self.radius = planet_dict["radius"]
+            self.mass_planet_Ot20()
+        except KeyError:
+            self.mass = planet_dict["mass"]
+            self.radius_planet_Ot20()
 
+        self.calculate_density_cgs()
+        # variable can be set later
+        self.EUV_relation = None
+        self.calculate_eq_temp()
+        self.calculate_period()
+    
+    # Class Methods
+    def calculate_eq_temp(self):
+        """ Calculate planetary equilibrium temperature assuming
+        a Bond albedo of 0 (all incoming radiation is absorbed). """
+        self.t_eq = (((self.Lbol / const.L_sun.cgs.value * const.L_sun.cgs) \
+                         / (16 * np.pi * const.sigma_sb.cgs \
+                            * (self.distance * const.au.cgs)**2))**(0.25)).value
+        
+    def calculate_density_cgs(self):
+        """ Calculate planetary mean density. """
+        self.density = ((self.mass * const.M_earth.cgs) \
+                       / (4./3 * np.pi * (self.radius * const.R_earth.cgs)**3)).value
+        
+    def calculate_period(self):
+        """ Approximate period from Kepler's 3rd law. 
+            Assuming a circular orbit.
+        """ 
+        P_sec = (4 * np.pi**2 \
+                 / (const.G.cgs * (self.mass_star * const.M_sun.cgs +
+                                   self.mass * const.M_earth.cgs))\
+                 * (self.distance * const.au.cgs)**3)**(0.5)
+        self.period = P_sec.value / (86400)  # in days
+        
     def mass_planet_Ot20(self):
         """ calculate planet mass based on radius.
         I only use the volatile rich regime! This means the radius needs 
@@ -63,13 +115,13 @@ class Planet_Ot20():
             rho_volatile = M_p_volatile * M_EARTH \
                            / (4 / 3 * np.pi * (self.radius * R_EARTH)**3)
             if (rho_volatile >= 3.3):
-                raise Exception("Planet with this radius is too small" \
-                                + "and likely rocky; use LoFo14 models" \
-                                + "instead.")
+                raise Exception("Planet with this radius is too small " \
+                                + "and likely mostly rocky; use LoFo14 models" \
+                                + " instead.")
             else:
                 if (M_p_volatile >= 120.):
                     raise Exception("Planet too massive. M-R relation only" \
-                                    + "valid for <120 M_EARTH.")
+                                    + " valid for <120 M_EARTH.")
                 else:
                     self.mass = M_p_volatile
 
@@ -141,8 +193,9 @@ class Planet_Ot20():
         """ 
         # create a file (e.g. planet_XXXX.txt) which contains the
         # initial planet params
-        if not os.path.exists(path_for_saving + planet_folder_id + ".txt"):
-            with open(path_for_saving + planet_folder_id + ".txt", "w") as p:
+        path = os.path.join(path_for_saving, planet_folder_id + ".txt")
+        if not os.path.exists(path):
+            with open(path, "w") as p:
                 planet_params = "a,mass,radius,age\n" \
                                  + str(self.distance) + "," \
                                  + str(self.mass) + "," \
@@ -152,9 +205,9 @@ class Planet_Ot20():
 
         # create a file (track_params_planet_....txt) which contains
         # the track parameters
-        if not os.path.exists(path_for_saving + "track_params_" \
-                              + self.planet_id + ".txt"):
-                with open(path_for_saving + "track_params_" + self.planet_id + ".txt", "w") as t:
+        path = os.path.join(path_for_saving, "track_params_" + self.planet_id + ".txt")
+        if not os.path.exists(path):
+                with open(path, "w") as t:
                     track_params = "t_start,t_sat,t_curr,t_5Gyr,Lx_max,Lx_curr," \
                                     + "Lx_5Gyr,dt_drop,Lx_drop_factor\n" \
                                     + str(evo_track_dict["t_start"]) + "," \
@@ -169,8 +222,9 @@ class Planet_Ot20():
                     t.write(track_params)
 
         # create a file which contains the host star parameters
-        if not os.path.exists(path_for_saving + "host_star_properties.txt"):
-            with open(path_for_saving + "host_star_properties.txt", "w") as s:
+        path = os.path.join(path_for_saving, "host_star_properties.txt")
+        if not os.path.exists(path):
+            with open(path, "w") as s:
                 star_params = "star_id,mass_star,radius_star,age,Lbol,Lx_age\n" \
                                 + self.star_id + "," + str(self.mass_star) \
                                 + "," + str(self.radius_star) \
@@ -183,67 +237,70 @@ class Planet_Ot20():
         """ Create file with only the final time, mass and radius parameters. """ 
         
         # create another file, which contains the final parameters only
-        if not os.path.exists(path_for_saving \
-                              + self.planet_id + "_final.txt"):
-            with open(path_for_saving + self.planet_id + "_final.txt", "w") as p:
+        path = os.path.join(path_for_saving, self.planet_id + "_final.txt")
+        if not os.path.exists(path):
+            with open(path, "w") as p:
                 # get last element (final time, mass, radius)
                 t_final = results_df["Time"].iloc[-1]
                 R_final = results_df["Radius"].iloc[-1]
                 M_final = results_df["Mass"].iloc[-1]
-                planet_params = "a,time,mass,radius,track\n" \
+                Lx_final = results_df["Lx"].iloc[-1]
+                planet_params = "a,time,mass,radius,Lx,track\n" \
                                 + str(self.distance) + "," \
                                 + str(t_final) + "," \
                                 + str(M_final) + "," \
                                 + str(R_final) + "," \
+                                + str(Lx_final) + "," \
                                 + self.planet_id
                 p.write(planet_params)
 
-    def evolve_forward(self, t_final,
+    def evolve_forward(self,
+                       t_final,
                        initial_step_size,
-                       epsilon, K_on, beta_on,
-                       evo_track_dict, 
+                       epsilon, K_on, beta_settings,
+                       evo_track_dict,
                        path_for_saving,
-                       planet_folder_id):
+                       planet_folder_id,
+                       relation_EUV="Linsky",
+                       mass_loss_calc="Elim"):
         """ Call this function to make the planet evolve and 
         create file with mass and radius evolution. 
         See Mass_evolution_function.py for details on the integration.
         """
         
-        if os.path.exists(path_for_saving + self.planet_id + ".txt"):
+        path = os.path.join(path_for_saving + self.planet_id + ".txt")
+        if os.path.exists(path):
             # planet already exists
             self.has_evolved = True
-            df = pd.read_csv(path_for_saving + self.planet_id + ".txt")
+            df = pd.read_csv(path)
         else:
             #print("Planet: ", self.planet_id+".txt")
             # call mass_planet_RK4_forward_LO14 to start the integration
-            t, M, R, Lx = mass_planet_RK4_forward_Ot20(
-                                    epsilon=epsilon,
-                                    K_on=K_on,
-                                    beta_on=beta_on,
-                                    planet_object=self,
-                                    initial_step_size=initial_step_size,
-                                    t_final=t_final,
-                                    track_dict=evo_track_dict
-                                    )
+            df = mass_evo_RK4_forward(self,
+                                      evo_track_dict,
+                                      mass_loss_calc,
+                                      epsilon=epsilon,
+                                      K_on=K_on, beta_settings=beta_settings,
+                                      initial_step_size=initial_step_size,
+                                      t_final=t_final,
+                                      relation_EUV=relation_EUV)
             
-            ### TO DO: move this to mass_planet_RK4_forward_LO14 -
-            # > make it return dataframe
-            # add results to dataframe and save
-            df = pd.DataFrame({"Time": t, "Mass": M, "Radius": R, "Lx": Lx})
-            df.to_csv(path_for_saving + self.planet_id + ".txt", index=None)
+            df.to_csv(path, index=None)
             self.has_evolved = True  # set evolved-flag to True
                 
         return df
     
-    def evolve_forward_and_create_full_output(self, t_final,
+    def evolve_forward_and_create_full_output(self,
+                                              t_final,
                                               initial_step_size,
                                               epsilon,
                                               K_on,
-                                              beta_on,
+                                              beta_settings,
                                               evo_track_dict,
                                               path_for_saving,
-                                              planet_folder_id
-                                              ):
+                                              planet_folder_id,
+                                              relation_EUV="Linsky",
+                                              mass_loss_calc="Elim"):
         """ This is the master-function which needs to be called to 
         evolve the planet and at the same time create all necessary 
         output files which contain useful data about initial params, 
@@ -257,13 +314,16 @@ class Planet_Ot20():
                                           evo_track_dict)
         
         results_df = self.evolve_forward(t_final, initial_step_size,
-                                         epsilon, K_on, beta_on,
+                                         epsilon, K_on, beta_settings,
                                          evo_track_dict,
                                          path_for_saving,
-                                         planet_folder_id)
+                                         planet_folder_id,
+                                         relation_EUV=relation_EUV,
+                                         mass_loss_calc=mass_loss_calc)
         
         # create file with final planet params
         self.write_final_params_to_file(results_df, path_for_saving)
+
 
     def read_results(self, file_path):
         """  read in results file and return dataframe. """

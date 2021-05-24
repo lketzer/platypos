@@ -3,8 +3,6 @@ import pandas as pd
 from scipy import interpolate
 import os
 import platypos
-d = platypos.__file__.rstrip("__init__.py/")
-print(d)
 #import pkgutil
 #import sys
 #d = os.path.dirname(sys.modules[platypos].__file__)
@@ -27,3 +25,21 @@ def mass_lum_relation_mamajek():
     logL_from_M = interpolate.interp1d(df["Msun"], df["logL"], kind="linear")
 
     return logL_from_M
+
+
+zams_data = 'ZAMS_M,ZAMS_Lbol\n0.5,0.04178454942288388\n0.52,0.046573021852589346\n0.54,0.05198518602682294\n0.56,0.05812998255014372\n0.58,0.06510055169118956\n0.6,0.07305171010101524\n0.62,0.08212692581828283\n0.64,0.09251248074251542\n0.66,0.1043143564977901\n0.68,0.11769989600505434\n0.7,0.13296491584305375\n0.72,0.1501428670584827\n0.74,0.16996717561188915\n0.76,0.19203614730214563\n0.78,0.2165844788456062\n0.8,0.2437106744913848\n0.82,0.2735645670479229\n0.84,0.3061253861846496\n0.86,0.3417602462583412\n0.88,0.38056893372243045\n0.9,0.42286697076099267\n0.92,0.4686400195703772\n0.94,0.5181320443347773\n0.96,0.5718064544979591\n0.98,0.6295389391871146\n1.0,0.6918273049149967\n1.02,0.7587657914823277\n1.04,0.8306173903745214\n1.06,0.9073601258694581\n1.08,0.9913334644957483\n1.1,1.0820652814849576\n1.12,1.1755367429000179\n1.14,1.2832588548719788\n1.16,1.3905436618504423\n1.18,1.5156392383521644\n1.2,1.643524037677865\n1.22,1.783397591940498\n1.24,1.9271140861768923\n1.26,2.0884980418290278\n1.28,2.26395825471513\n1.3,2.4481324557039876\n1.32,2.641871826213076\n1.34,2.8535073821510077\n1.36,3.0734062553621975\n1.38,3.309757275429738\n\n'
+
+def mass_lum_relation_thomas():
+    """ Estimate Lbol right when star reaches the ZAMS 
+    (from T. Steindl's pre-MS MESA models)
+    
+    Returns:
+    --------
+    L_from_M (function): interpolation function which takes a mass 
+    value and returns the bolometric luminosity in solar units
+    """
+    df = pd.read_csv(io.StringIO(zams_data), sep=',')
+    L_from_M = interpolate.interp1d(df["ZAMS_M"], df["ZAMS_Lbol"],
+                                    kind="quadratic", fill_value="extrapolate")
+    
+    return L_from_M

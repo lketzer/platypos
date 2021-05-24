@@ -22,7 +22,7 @@ def calculate_core_radius(M_core):
 def calculate_planet_mass(M_core, fenv):
     """ Planet mass determined by core mass and atmosphere mass
     (specified in terms of envelope mass fraction [in % !]). """
-    M_pl = M_core/(1-(fenv/100))
+    M_pl = M_core / (1 - (fenv/100))
     return M_pl
 
 
@@ -40,6 +40,7 @@ def calculate_R_env(M_p, fenv, F_p, age, metallicity):
     age (float): age of the planet (in Myr)
     metallicity (str): chose models with solar or enhanced metallicity
                        (set to "solarZ" or "enhZ")
+    
     (check Lopez & Fortney 2014 for further details and range of model
     validity).
 
@@ -97,6 +98,5 @@ def density_planet(M_p, R_p):
     rho (float): density in cgs units (g/ccm)
     """
 
-    rho = (M_p*const.M_earth.cgs) \
-        / (4./3*np.pi*(R_p*const.R_earth.cgs)**3)
-    return rho.value
+    return (M_p * const.M_earth.cgs.value) \
+            / ((4./3) * np.pi * (R_p * const.R_earth.cgs.value)**3)
