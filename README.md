@@ -5,7 +5,8 @@ Tool to estimate the atmospheric mass loss of planets induced by stellar X-ray a
 
 ## Installation
 
-Download the *platypos_newest_release* branch.
+**For now, please download/git clone the *platypos_newest_release* branch, and check out the example notebook *Evolve_one_planet.ipynb*. <br>
+Additionally: download/git clone *multitrack* and look at the example on how to easily evolve a set of planets in *Test_platypos_and_multi_track.ipynb*.**
 
 ## Our Model Assumptions
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time.
