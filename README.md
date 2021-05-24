@@ -62,8 +62,15 @@ These "mature" relationships show two regimes, one for small rocky planets up to
 1. *Giant planets with mass-radius relations computed using MESA* <br>
 To be implemented...
 
+## Estimation of the Effective Absorption Cross Section (or &#946;)
+1. Salz et al. (2015) <br> 
+more info to follow!
 
-## Quickstart
+1. Lopez et al. (2017) <br> 
+more info to follow!
+
+
+### Quickstart
 
 Open a jupyter notebook:
 ```bash
