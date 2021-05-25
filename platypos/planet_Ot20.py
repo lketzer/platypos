@@ -262,13 +262,14 @@ class Planet_Ot20():
                        path_for_saving,
                        planet_folder_id,
                        relation_EUV="Linsky",
-                       mass_loss_calc="Elim"):
+                       mass_loss_calc="Elim",
+                       fenv_sample_cut=None):
         """ Call this function to make the planet evolve and 
         create file with mass and radius evolution. 
         See Mass_evolution_function.py for details on the integration.
         """
         
-        path = os.path.join(path_for_saving + self.planet_id + ".txt")
+        path = os.path.join(path_for_saving, self.planet_id + ".txt")
         if os.path.exists(path):
             # planet already exists
             self.has_evolved = True
@@ -300,7 +301,8 @@ class Planet_Ot20():
                                               path_for_saving,
                                               planet_folder_id,
                                               relation_EUV="Linsky",
-                                              mass_loss_calc="Elim"):
+                                              mass_loss_calc="Elim",
+                                              fenv_sample_cut=None):
         """ This is the master-function which needs to be called to 
         evolve the planet and at the same time create all necessary 
         output files which contain useful data about initial params, 
@@ -319,7 +321,8 @@ class Planet_Ot20():
                                          path_for_saving,
                                          planet_folder_id,
                                          relation_EUV=relation_EUV,
-                                         mass_loss_calc=mass_loss_calc)
+                                         mass_loss_calc=mass_loss_calc,
+                                         fenv_sample_cut=fenv_sample_cut)
         
         # create file with final planet params
         self.write_final_params_to_file(results_df, path_for_saving)
