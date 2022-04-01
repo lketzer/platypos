@@ -157,8 +157,8 @@ def mass_loss_rate(t_,
             (np.iscomplex(mass_loss_Mdot_RRlim) == True)):
                 return np.nan
         else:
-            mass_loss_Mdot = -min(-mass_loss_Mdot_Elim, -mass_loss_Mdot_RRlim)
-            if -mass_loss_Mdot_RRlim < -mass_loss_Mdot_Elim:
+            mass_loss_Mdot = -min(abs(mass_loss_Mdot_Elim), abs(mass_loss_Mdot_RRlim))
+            if abs(mass_loss_Mdot_RRlim) < abs(mass_loss_Mdot_Elim):
                 Mdot_info = "RRlim"
             else: 
                 Mdot_info = "Elim"
@@ -881,8 +881,9 @@ def mass_loss_rate_HBA_noplanetobj(M_p, R_p,
         return -M_dot_HBA  # in cgs units [g/s]
     
     except:
-        raise Exception("Something went wrong in calculating the hydro-based "+\
-                        "mass-loss rates.")  
+        return np.nan
+        #raise Exception("Something went wrong in calculating the hydro-based "+\
+        #                "mass-loss rates.")  
         
         
 def mass_loss_rate_RRlim_noplanetobj(M_p, R_p, Fxuv, distance=None,

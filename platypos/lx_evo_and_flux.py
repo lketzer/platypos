@@ -484,8 +484,7 @@ def R_M_relation(R):
     else: return M2
 
 
-
-def calculate_EUV_luminosity_Chadney15(lx, mstar=None):
+def calculate_EUV_luminosity_Chadney15(lx, mstar=None, radius=None):
     """ Function to estimate the EUV suface flux using the scaling relations 
     given by Johnstone et al. (2020), coupled with a M-R relation to estimate
     the total luminosity (Eker et al., 2018). 
@@ -495,7 +494,12 @@ def calculate_EUV_luminosity_Chadney15(lx, mstar=None):
         raise Exception("To use the Chadney surface flux relation to estimate" +
                        " the EUV luminosity, you need to specify the mass of" +
                        " the star, e.g. mstar=1.0.")
-    A_star = 4 * np.pi * (M_R_relation(mstar)*const.R_sun.cgs.value)**2
+        
+    if radius != None:
+        Rstar = radius
+    else:
+        Rstar = M_R_relation(mstar)
+    A_star = 4 * np.pi * (Rstar*const.R_sun.cgs.value)**2
     F_x = lx / A_star
     logF_x = np.log10(F_x)
     LogF_EUV = 2.63 + 0.58*logF_x
@@ -503,7 +507,7 @@ def calculate_EUV_luminosity_Chadney15(lx, mstar=None):
     return Feuv * A_star
 
 
-def calculate_EUV_luminosity_Johnstone20(lx, mstar=None):
+def calculate_EUV_luminosity_Johnstone20(lx, mstar=None, radius=None):
     """ Function to estimate the EUV suface flux using the scaling relations 
     given by Johnstone et al. (2020), coupled with a M-R relation to estimate
     the total luminosity (Eker et al., 2018). 
@@ -513,7 +517,11 @@ def calculate_EUV_luminosity_Johnstone20(lx, mstar=None):
         raise Exception("To use the Johnstone surface flux relation to estimate" +
                        " the EUV luminosity, you need to specify the mass of" +
                        " the star, e.g. mstar=1.0.")
-    A_star = 4 * np.pi * (M_R_relation(mstar)*const.R_sun.cgs.value)**2
+    if radius != None:
+        Rstar = radius
+    else:
+        Rstar = M_R_relation(mstar)
+    A_star = 4 * np.pi * (Rstar*const.R_sun.cgs.value)**2
     F_x = lx / A_star
     logFeuv1 = 2.04 + 0.681 * np.log10(F_x)
     logFeuv2 = -0.341 + 0.920*logFeuv1
@@ -567,7 +575,7 @@ def l_xuv_SanzForcada(lx):
     return 10.**log_L_xuv  # erg/s
 
 
-def l_xuv_all(lx, relation="Linsky", mstar=None):
+def l_xuv_all(lx, relation="Linsky", mstar=None, radius=None):
     """Function to estimate the EUV luminosity using the scaling relations 
     given either by Linsky et al. (2013, 2015) OR Sanz-Forcada et al. (2011);
     the measured X-ray luminosity is used to estimate the EUV luminosity and 
@@ -583,11 +591,11 @@ def l_xuv_all(lx, relation="Linsky", mstar=None):
         return l_xuv_Linsky(lx)
     
     elif relation == "Chadney":
-        leuv = calculate_EUV_luminosity_Chadney15(lx, mstar)
+        leuv = calculate_EUV_luminosity_Chadney15(lx, mstar, radius=radius)
         return lx + leuv
     
     elif relation == "Johnstone":
-        leuv = calculate_EUV_luminosity_Johnstone20(lx, mstar)
+        leuv = calculate_EUV_luminosity_Johnstone20(lx, mstar, radius=radius)
         return lx + leuv
     
     else:

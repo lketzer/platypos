@@ -6,17 +6,18 @@ from astropy import constants as const
 def beta_calc(M_p, R_p, F_xuv,
               beta_settings,
               distance=None, M_star=None, Lbol_solar=None):
-    """Function estimates the beta parameter, which is a correction to the
+    """ beta & K calculator
+    
+    Function estimates the beta parameter, which is a correction to the
     planetary absorption radius in XUV, as planet appers larger than in
     optical: beta = R_XUV/R_optical.
 
-    Parameters:
-    ----------
-    M_p (float): mass of the planet in Earth units
-    R_p (float): radius mass of the planet in Earth units
-    F_xuv (float): XUV flux recieved by planet (cgs)
+    Args:
+        M_p (float): mass of the planet in Earth units
+        R_p (float): radius mass of the planet in Earth units
+        F_xuv (float): XUV flux recieved by planet (cgs)
     
-    beta_settings (dict): 
+        beta_settings (dict): 
             Depending on the estimation procedure, the dictionary
             has 1, 2 or 3 params.
             1) beta_calc (str): "Salz16" or "Lopez17" or "off"
@@ -35,12 +36,11 @@ def beta_calc(M_p, R_p, F_xuv,
                         - IF cutoff == False, the user agrees to extrapolate
                         this relation beyond the Salz-sample limits.                     
     
-    distance (float): semi-major axis of planet (needed for RL and Lopez calc)
-    M_star (float): mass of star (needed for RL calc)
-    Lbol_solar (float): stellar bolometric luminosity (needed for Lopez calc)
+        distance (float): semi-major axis of planet (needed for RL and Lopez calc)
+        M_star (float): mass of star (needed for RL calc)
+        Lbol_solar (float): stellar bolometric luminosity (needed for Lopez calc)
 
     Returns:
-    --------
     beta (float): beta parameter
     """
     try: 
