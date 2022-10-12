@@ -7,9 +7,8 @@ Tool to estimate the atmospheric mass loss of planets induced by stellar X-ray a
 
 ## Installation
 
-**NOTE: 'pip install platypos' installs an old version. Better to clone and use the *platypos_newest_release* branch for now!
-ALSO look at the *platypos_newest_release* readme-file to learn about the recent (major) updates to the code.
-Plus: git clone multitrack and look at the example on how to easily evolve a set of planets in Test_platypos_and_multi_track.ipynb**
+**NOTE: 'pip install platypos' installs an old version. Better to clone and use the *platypos_newest_release* branch for now!**
+Plus: git clone multitrack and look at the example on how to easily evolve a set of planets in Test_platypos_and_multi_track.ipynb
 
 Create a virtual environment:
 
@@ -55,15 +54,13 @@ Most previous studies of exoplanet evaporation approximate the stellar XUV evolu
 At the moment, the user can choose between two planet models.
 
 1. *Planet with a rocky core and H/He envelope atop* <br>
-We use the tabulated models of Lopez & Fortney (2014)<sup>[7](#Lopez-Fortney-14)</sup>, who calculate radii for low-mass planets with hydrogen-helium envelopes on top of Earth-like rocky cores, taking into account the cooling and thermal contraction of the atmospheres of such planets over time. Their simulations extend to young planetary ages, at which planets are expected to still be warm and possibly inflated. Simple analytical fits to their simulation results are provided, which we use to trace the thermal and photoevaporative evolution of the planetary radius over time.
+We use the tabulated models of Lopez & Fortney (2014)<sup>[7](#Lopez-Fortney-14)</sup>, who calculate radii for low-mass planets with hydrogen-helium envelopes on top of Earth-like rocky cores, taking into account the cooling and thermal contraction of the atmospheres of such planets over time. Their simulations extend to young planetary ages, at which planets are expected to still be warm and possibly inflated. Simple analytical fits to their simulation results are provided, which we use to trace the thermal and photoevaporative evolution of the planetary radius over time. In addition, the MESA-based models by Chen & Rogers (2016) can be selected by the user too (see Ketzer & Poppenhaeger 2022 for a comparison of the two).
 
 1. *Planet which follows the empirical mass-radius relationships observed for planets around older stars* <br> 
 (see Otegi et al. (2020)<sup>[8](#Otegi-et-al-2020)</sup>, also Chen & Kipping (2017)<sup>[9](#Chen-Kipping-2017)</sup>) <br>
 These "mature" relationships show two regimes, one for small rocky planets up to radii of about 2 Earth radii and one for larger planets with volatile-rich envelopes. The scatter is low in the rocky planet regime and larger in the gaseous planet regime: as core vs. envelope fractions may vary, there is a broader range of observed masses at a given planetary radius for those larger planets. 
 
-1. *Giant planets with mass-radius relations computed using MESA* <br>
-To be implemented...
-
+If you want to know more about the siumulation inputs, check the code (partially documented) or Ketzer & Poppenhaeger 2022.
 
 ## Quickstart
 
@@ -96,21 +93,25 @@ stellar_evolutionary_track = {'t_start': 20. (Myr), 't_sat': 100., 't_curr': 100
 
 3) Specify the planet parameters <br>
 ```python
-planet_params1 = {'radius': 5.59, 'distance': 0.0825, 'core_mass': 5.0, 'metallicity': "solarZ"}
+planet_params1 = {'radius': 5.59, 'distance': 0.0825, 'core_mass': 5.0}
 planet_params2 = {'radius': 5.59, 'distance': 0.0825}
 ```
 
 4) Create the planet object <br>
 ```python
 pl = Planet_LoFo14(host_star_params, planet_params1)
+pl = Planet_ChRo16(host_star_params, planet_params1)
 pl = Planet_Ot20(host_star_params, planet_params2)
 ```
 
 5) Specify additional parameters for the platypos run <br>
-	- beta and K on (or off)? `"yes"` or `"no"`
-	- evaporation efficiency: epsilon
-	- end time of simulation: t_final
-	- initial step size: init_dt
+ 	- end time of simulation: t_final
+	- initial step size: init_dt (0.1 Myr)
+	- evaporation efficiency: epsilon (~10%)
+	- K on (or off)? `"yes"` or `"no"`
+	- how to estimate your imporant EUVS ('Johnstone', 'SanzForcada', or 'Linsky')
+	- the mass-loss rate estimation method ('Elim', 'Elim_and_RRlim','HBA')
+	- beta_settings (beta=1, Salz or Lopez beta; check documentation)
 	- track to evolve star-planet system along: stellar_evolutionary_track
 	- path to save results: path_save
 	- folder in path_save to save results in: folder_id
@@ -118,12 +119,14 @@ pl = Planet_Ot20(host_star_params, planet_params2)
 4) Evolve the planet along defined track: <br>
 ```python
 pl.evolve_forward_and_create_full_output(t_final, init_dt, epsilon, 
-					 "yes", "yes", 
+					 K_on="yes", relation_EUV="Johnstone", 
+					 mass_loss_calc='Elim',
+                                         beta_settings={"beta_calc": "off},
 					 stellar_evolutionary_track, 
 					 path_save, folder_id)
 ```
 
-5) Look at Results: <br>
+5) Look at Results (mass & radius evolution with time): <br>
 ```python
 df_pl = pl.read_results(path_save)
 ```
@@ -136,9 +139,11 @@ df_pl = pl.read_results(path_save)
                            Tu et al. (2015)<sup>[4](#Tu-et-al-15)</sup> model tracks for the X-ray luminosity evolution,  <br>
                            Jackson et al. (2012)<sup>[10](#Jackson-et-al-12)</sup> sample of X-ray measurements in young clusters)
 
-* **examples**: Two example notebooks which show how to use `playpos`.  <br>
+* **examples**: Best to look at the example notebooks which show how to use `playpos`.  
+		Not the most user-friendly code, I'm sorry! <br>
+		*evolve_one_planet.ipynb* or *evolve_one_planet_latertypestar.ipynb* <br>
 		Evolve the four young V1298 Tau planets as shown in *X-ray irradiation and evaporation of the four young planets around V1298 Tau* (Poppenhaeger, 		  Ketzer, Mallon 2020)<sup>[11](#Poppenhaeger-et-al-20)</sup> <br>
-		NOTE: for the V1298Tau notebook, you also need the package `multi_track`. 
+		NOTE: for the V1298Tau notebook, you also need the package `multitrack`. 
 
 
 ## References:
