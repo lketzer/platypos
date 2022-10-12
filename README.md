@@ -29,6 +29,8 @@ pip install platypos
 We do not make use of full-blown hydrodynamical simulations, but instead couple existing parametrizations of planetary mass-radius relations with an energy-limited hydrodynamic escape model to estimate the mass-loss rate over time. 
 
 ### Mass-loss description: <br> 
+We have three mass-loss rate calculations built in. Energy-limited, radiation-recombination-limited and a hydro-based approximation. Check Ketzer & Poppenhaeger 2022 for detailed describtions. <br>
+
 <a href="https://www.codecogs.com/eqnedit.php?latex=\small&space;\dot{M}&space;=&space;\epsilon&space;\frac{(\pi&space;R_{XUV}^2)&space;F_{\mathrm{XUV}}}{K&space;G&space;M_{pl}/R_{pl}&space;}&space;=&space;\epsilon&space;\frac{3&space;\beta^2&space;F_{\mathrm{XUV}}}{4&space;G&space;K&space;\rho_{pl}}\,," target="_blank"><img src="https://latex.codecogs.com/gif.latex?\small&space;\dot{M}&space;=&space;\epsilon&space;\frac{(\pi&space;R_{XUV}^2)&space;F_{\mathrm{XUV}}}{K&space;G&space;M_{pl}/R_{pl}&space;}&space;=&space;\epsilon&space;\frac{3&space;\beta^2&space;F_{\mathrm{XUV}}}{4&space;G&space;K&space;\rho_{pl}}\,," title="\small \dot{M} = \epsilon \frac{(\pi R_{XUV}^2) F_{\mathrm{XUV}}}{K G M_{pl}/R_{pl} } = \epsilon \frac{3 \beta^2 F_{\mathrm{XUV}}}{4 G K \rho_{pl}}\,," /></a>
 
 where 
@@ -52,7 +54,7 @@ Most previous studies of exoplanet evaporation approximate the stellar XUV evolu
 
 
 ### Planet Model description: <br>
-At the moment, the user can choose between two planet models.
+At the moment, the user can choose between three planet models.
 
 1. *Planet with a rocky core and H/He envelope atop* <br>
 We use the tabulated models of Lopez & Fortney (2014)<sup>[7](#Lopez-Fortney-14)</sup>, who calculate radii for low-mass planets with hydrogen-helium envelopes on top of Earth-like rocky cores, taking into account the cooling and thermal contraction of the atmospheres of such planets over time. Their simulations extend to young planetary ages, at which planets are expected to still be warm and possibly inflated. Simple analytical fits to their simulation results are provided, which we use to trace the thermal and photoevaporative evolution of the planetary radius over time. In addition, the MESA-based models by Chen & Rogers (2016) can be selected by the user too (see Ketzer & Poppenhaeger 2022 for a comparison of the two).
