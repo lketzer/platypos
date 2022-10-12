@@ -8,6 +8,8 @@ from astropy import constants as const
 
 from platypos.lx_evo_and_flux import flux_at_planet_earth, flux_at_planet
 from platypos.mass_evolution_function import mass_evo_RK4_forward
+import platypos.planet_models_ChRo16 as plmoChRo16
+
 
 
 class Planet_ChRo16():
@@ -105,8 +107,52 @@ class Planet_ChRo16():
                 self.calculate_planet_radius()
                 self.calculate_density_cgs()
                 break
-            except:
-                raise KeyError("Need to specify fenv and M_core!")
+            except KeyError:  # if no f_env is provided, then we are dealing
+                              # with Case 2 or 3:
+                while True:
+                    try:
+                        # no mass and fenv given -> Case 2
+                        self.planet_info = "Case 2 - obs. planet with "\
+                        				    + "radius, but no mass "\
+                                            + "measurement, but core "\
+                                            + "mass specified."
+                        # Case 2 - observed planet with a without a mass, but
+                        # core mass estimate, need to calculate fenv
+                        self.core_mass = planet_dict["core_mass"]
+                        self.radius = planet_dict["radius"]
+                        self.calculate_core_radius()
+                        self.solve_for_fenv()  # get envelope mass fraction
+                        self.calculate_planet_mass()
+                        self.calculate_density_cgs()
+                        # Note to self: add sanity check to make sure the radius
+                        # with the calculated fenv matches the input radius!
+                        break
+                    except KeyError:
+                        print('error')
+                        """
+                        # check if planet mass is provided, then Case 3
+                        planet_dict["mass"]
+                        # Case 3: An observed planet with radius and mass
+                        #         measurement, plus core mass is specified;
+                        #         need to calculate/estimate envelope mass frac.
+                        self.planet_info = "Case 3 - obs. planet with radius"\
+                                            + " & mass measurement (and core "\
+                                            + "mass estimate)"
+                        self.core_mass = planet_dict["core_mass"]
+                        self.mass = planet_dict["mass"]
+                        self.radius = planet_dict["radius"]
+                        self.calculate_density_cgs()
+                        self.calculate_core_radius()
+                        self.solve_for_fenv()  # get for envelope mass fraction
+
+                        # Note to self: add sanity check to make sure the mass
+                        # with the calculated fenv matches the input mass!
+                        # Note to self: add sanity check to make sure the radius
+                        # with the calculated fenv matches the input radius!
+                        break
+                        """
+                        
+                break
 
         self.calculate_density()
         self.calculate_grav_potential()
@@ -188,8 +234,31 @@ class Planet_ChRo16():
 
     def solve_for_fenv(self):
         """ For known core and planet radius, core mass, age and flux,
-            solve for envelope mass fraction."""
-        raise NotImplementedError("Need to specify an envelope mass fraction!")
+            solve for envelope mass fraction. not pretty...
+            basically I try different fenv values until I find the one
+            which best matches the observed radius."""
+        
+        # similarity criterion & step size hardcoded
+        eps = 0.001
+        dfenv = 0.005
+        fenv = 0.
+
+        if self.radius == self.core_radius:
+            self.fenv = 0.0
+        else:
+            while True:
+                planet = {"distance": self.distance, "core_mass": self.core_mass, 'fenv': fenv}
+                
+                M_core, fenv = self.core_mass, fenv
+                F_p, age = self.flux, self.age
+                radius = self.core_radius + plmoChRo16.calculate_R_env(M_core, fenv, F_p, age)
+                #print(fenv, radius, abs(radius - self.radius))
+                
+                if (abs(radius - self.radius) <= eps):
+                    #print(f'fenv={fenv:.3f}, radius={radius:.2f}', abs(radius - self.radius))
+                    self.fenv = fenv
+                    break
+                fenv += dfenv
 
 
     def calculate_R_env(self):
