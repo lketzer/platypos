@@ -7,8 +7,9 @@ Tool to estimate the atmospheric mass loss of planets induced by stellar X-ray a
 
 ## Installation
 
-**NOTE: 'pip install platypos' installs an old version. Better to clone and use the *platypos_newest_release* branch for now!**
-Plus: git clone multitrack and look at the example on how to easily evolve a set of planets in Test_platypos_and_multi_track.ipynb
+**NOTE: 'pip install platypos' installs an old version. Better to clone and use the *platypos_newest_release* branch for now!** <br> 
+Also, if you want to use it and something doesn't work or you have questions, simply write me an e-mail (lketzer@aip.de) (It's not the most user-friendly code, I'm sorry!) <br>
+Add-on: git clone multitrack and look at the example on how to easily evolve a set of planets in Test_platypos_and_multi_track.ipynb
 
 Create a virtual environment:
 
@@ -139,8 +140,7 @@ df_pl = pl.read_results(path_save)
                            Tu et al. (2015)<sup>[4](#Tu-et-al-15)</sup> model tracks for the X-ray luminosity evolution,  <br>
                            Jackson et al. (2012)<sup>[10](#Jackson-et-al-12)</sup> sample of X-ray measurements in young clusters)
 
-* **examples**: Best to look at the example notebooks which show how to use `playpos`.  
-		Not the most user-friendly code, I'm sorry! <br>
+* **examples**: Best to look at the example notebooks which show how to use `playpos`.  <br>
 		*evolve_one_planet.ipynb* or *evolve_one_planet_latertypestar.ipynb* <br>
 		Evolve the four young V1298 Tau planets as shown in *X-ray irradiation and evaporation of the four young planets around V1298 Tau* (Poppenhaeger, 		  Ketzer, Mallon 2020)<sup>[11](#Poppenhaeger-et-al-20)</sup> <br>
 		NOTE: for the V1298Tau notebook, you also need the package `multitrack`. 
