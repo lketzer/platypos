@@ -8,6 +8,7 @@ from astropy import constants as const
 
 from platypos.lx_evo_and_flux import flux_at_planet_earth, flux_at_planet
 from platypos.mass_evolution_function import mass_evo_RK4_forward
+from platypos.mass_evolution_function import mass_evo_RK4_backwards
 import platypos.planet_models_ChRo16 as plmoChRo16
 
 
@@ -101,6 +102,7 @@ class Planet_ChRo16():
                 # Case 1: artificial planet with fenv & M_core given, need to
                 #         calculate the total mass and radius
                 self.fenv = planet_dict["fenv"]
+                #print(self.fenv)
                 self.core_mass = planet_dict["core_mass"]
                 self.calculate_core_radius()
                 self.calculate_planet_mass()
@@ -234,93 +236,96 @@ class Planet_ChRo16():
 
     def solve_for_fenv(self):
         """ For known core and planet radius, core mass, age and flux,
-            solve for envelope mass fraction. not pretty...
-            basically I try different fenv values until I find the one
-            which best matches the observed radius."""
-        
-        # similarity criterion & step size hardcoded
-        eps = 0.001
-        dfenv = 0.005
-        fenv = 0.
-
-        if self.radius == self.core_radius:
-            self.fenv = 0.0
-        else:
-            while True:
-                planet = {"distance": self.distance, "core_mass": self.core_mass, 'fenv': fenv}
-                
+            solve for envelope mass fraction. 
+            not pretty...
+            starting guess hardcoded. Double check result for convergence."""
+  
+        def fenv_optimizer(fenv):
+            if self.radius == self.core_radius:
+                self.fenv = 0.0
+            else:
+                planet = {"distance": self.distance,
+                          "core_mass": self.core_mass, 'fenv': fenv}
                 M_core, fenv = self.core_mass, fenv
                 F_p, age = self.flux, self.age
-                radius = self.core_radius + plmoChRo16.calculate_R_env(M_core, fenv, F_p, age)
-                #print(fenv, radius, abs(radius - self.radius))
                 
-                if (abs(radius - self.radius) <= eps):
-                    #print(f'fenv={fenv:.3f}, radius={radius:.2f}', abs(radius - self.radius))
-                    self.fenv = fenv
-                    break
-                fenv += dfenv
+                r_fenv = self.core_radius + \
+                       plmoChRo16.calculate_R_env(M_core, fenv, F_p, age)
+                #print(fenv, r_fenv, abs(r_fenv - pl.radius))
 
+                return abs(r_fenv - self.radius)
+        
+        res = optimize.minimize(fenv_optimizer, x0=1.0,
+                                method='Nelder-Mead', tol=1e-6)
+        self.fenv = res.x.item()   
+            
 
     def calculate_R_env(self):
         """ Check planet_models_ChRo16.py for details on input and
             output parameters;
         """
-        # Coefficients Rocky-Core Planets
-        dict_rock = {"c_0": 0.131, "c_1": -0.348, "c_2": 0.631,
-                     "c_3": 0.104, "c_4": -0.179, "c_12": 0.028,
-                     "c_13": -0.168, "c_14": 0.008, "c_23": -0.045,
-                     "c_24": -0.036, "c_34": 0.031, "c_11": 0.209,
-                     "c_22": 0.086, "c_33": 0.052, "c_44": -0.009}
-        # Coefficients Ice-Rock-Core Planets
-        dict_ice = {"c_0": 0.169, "c_1": -0.436, "c_2": 0.572,
-                    "c_3": 0.154, "c_4": -0.173, "c_12": 0.014,
-                    "c_13": -0.210, "c_14": 0.006, "c_23": -0.048,
-                    "c_24": -0.040, "c_34": 0.031, "c_11": 0.246,
-                    "c_22": 0.074, "c_33": 0.059, "c_44": -0.006}
-
-        if self.core_comp == "rock":
-            params = dict_rock
-        elif self.core_comp == "ice":
-            params = dict_ice
-
-        x1 = np.log10(self.mass)
-        x2 = np.log10((self.fenv/100) / 0.05)
-        x3 = np.log10(self.flux)
-        x4 = np.log10((self.age/1e3) / 5)  # convert age to Gyr
-        var = {"x1": x1, "x2": x2, "x3": x3, "x4": x4}
-        #print(var)
         
-        def sum_notation1(i0=1, end=4):
-            total_sum = 0.
-            for i in range(i0, end+1):
-                c_i = params["c_"+str(i)]
-                x_i = var["x"+str(i)]
-                f = lambda x : c_i*x_i
-                total_sum += f(i)
-            return total_sum
+        if self.fenv == 0.:
+            self.R_env = 0.
+            R_env = 0.
+        else:
+            # Coefficients Rocky-Core Planets
+            dict_rock = {"c_0": 0.131, "c_1": -0.348, "c_2": 0.631,
+                         "c_3": 0.104, "c_4": -0.179, "c_12": 0.028,
+                         "c_13": -0.168, "c_14": 0.008, "c_23": -0.045,
+                         "c_24": -0.036, "c_34": 0.031, "c_11": 0.209,
+                         "c_22": 0.086, "c_33": 0.052, "c_44": -0.009}
+            # Coefficients Ice-Rock-Core Planets
+            dict_ice = {"c_0": 0.169, "c_1": -0.436, "c_2": 0.572,
+                        "c_3": 0.154, "c_4": -0.173, "c_12": 0.014,
+                        "c_13": -0.210, "c_14": 0.006, "c_23": -0.048,
+                        "c_24": -0.040, "c_34": 0.031, "c_11": 0.246,
+                        "c_22": 0.074, "c_33": 0.059, "c_44": -0.006}
 
-        def sum_notation2(i0=1, end_i=4, j0=1, end_j=4):
-            total_sum = 0.
-            for i in range(i0, end_i+1):
-                for j in range(j0, end_j+1):
-                    try: 
-                        c_ij = params["c_"+str(i)+str(j)]
-                        x_i = var["x"+str(i)]
-                        x_j = var["x"+str(j)]
-                        #print(i, j, c_ij, x_i, x_j)
-                        f = lambda x : c_ij*x_i*x_j
-                        total_sum += f(i)
-                    except KeyError:
-                        # this key is not defined
-                        continue
-            return total_sum
+            if self.core_comp == "rock":
+                params = dict_rock
+            elif self.core_comp == "ice":
+                params = dict_ice
 
-        # calculate envelope radius using the two sum functions
-        log10_Renv = params["c_0"] +\
-                            sum_notation1(1, 4) +\
-                            sum_notation2(1, 4, 1, 4)
-        R_env = 10**log10_Renv # in Earth radii
-        self.R_env = R_env
+            x1 = np.log10(self.mass)
+            x2 = np.log10((self.fenv/100) / 0.05)
+            x3 = np.log10(self.flux)
+            x4 = np.log10((self.age/1e3) / 5)  # convert age to Gyr
+            var = {"x1": x1, "x2": x2, "x3": x3, "x4": x4}
+            #print(var)
+
+            def sum_notation1(i0=1, end=4):
+                total_sum = 0.
+                for i in range(i0, end+1):
+                    c_i = params["c_"+str(i)]
+                    x_i = var["x"+str(i)]
+                    f = lambda x : c_i*x_i
+                    total_sum += f(i)
+                return total_sum
+
+            def sum_notation2(i0=1, end_i=4, j0=1, end_j=4):
+                total_sum = 0.
+                for i in range(i0, end_i+1):
+                    for j in range(j0, end_j+1):
+                        try: 
+                            c_ij = params["c_"+str(i)+str(j)]
+                            x_i = var["x"+str(i)]
+                            x_j = var["x"+str(j)]
+                            #print(i, j, c_ij, x_i, x_j)
+                            f = lambda x : c_ij*x_i*x_j
+                            total_sum += f(i)
+                        except KeyError:
+                            # this key is not defined
+                            continue
+                return total_sum
+
+            # calculate envelope radius using the two sum functions
+            log10_Renv = params["c_0"] +\
+                                sum_notation1(1, 4) +\
+                                sum_notation2(1, 4, 1, 4)
+            R_env = 10**log10_Renv # in Earth radii
+            self.R_env = R_env
+        
         return R_env
 
 
@@ -391,8 +396,10 @@ class Planet_ChRo16():
         path = os.path.join(path_for_saving, "track_params_" + self.planet_id + ".txt")
         if not os.path.exists(path):
             with open(path, "w") as t:
-                track_params = "t_start,t_sat,t_curr,t_5Gyr,Lx_max,Lx_curr," \
-                                + "Lx_5Gyr,dt_drop,Lx_drop_factor\n" \
+                try:
+                    self.Lx_age = evo_track_dict["Lx_star"] 
+                    track_params = "t_star,t_sat,t_curr,t_5Gyr,Lx_max,Lx_curr," \
+                                + "Lx_5Gyr,Lx_star,dt_drop,Lx_drop_factor\n" \
                                 + str(evo_track_dict["t_start"]) + "," \
                                 + str(evo_track_dict["t_sat"]) + ","  \
                                 + str(evo_track_dict["t_curr"]) + "," \
@@ -400,8 +407,21 @@ class Planet_ChRo16():
                                 + str(evo_track_dict["Lx_max"]) + "," \
                                 + str(evo_track_dict["Lx_curr"]) + "," \
                                 + str(evo_track_dict["Lx_5Gyr"]) + "," \
+                                + str(evo_track_dict["Lx_star"]) + "," \
                                 + str(evo_track_dict["dt_drop"]) + "," \
                                 + str(evo_track_dict["Lx_drop_factor"])
+                except:
+                    track_params = "t_start,t_sat,t_curr,t_5Gyr,Lx_max,Lx_curr," \
+                                    + "Lx_5Gyr,dt_drop,Lx_drop_factor\n" \
+                                    + str(evo_track_dict["t_start"]) + "," \
+                                    + str(evo_track_dict["t_sat"]) + ","  \
+                                    + str(evo_track_dict["t_curr"]) + "," \
+                                    + str(evo_track_dict["t_5Gyr"]) + "," \
+                                    + str(evo_track_dict["Lx_max"]) + "," \
+                                    + str(evo_track_dict["Lx_curr"]) + "," \
+                                    + str(evo_track_dict["Lx_5Gyr"]) + "," \
+                                    + str(evo_track_dict["dt_drop"]) + "," \
+                                    + str(evo_track_dict["Lx_drop_factor"])
                 t.write(track_params)
 
         # create a file which contains the host star parameters
@@ -452,7 +472,10 @@ class Planet_ChRo16():
                        planet_folder_id,
                        relation_EUV="Linsky",
                        mass_loss_calc="Elim",
-                       fenv_sample_cut=False):
+                       fenv_sample_cut=False,
+                       forward_backward=False,
+                       t_start=None,
+                       fixed_step_size=False):
         """ Call this function to make the planet evolve and 
         create file with mass and radius evolution.
         See Mass_evolution_function.py for details on the integration."""
@@ -474,7 +497,10 @@ class Planet_ChRo16():
                                      initial_step_size=initial_step_size,
                                      t_final=t_final,
                                      relation_EUV=relation_EUV,
-                                     fenv_sample_cut=fenv_sample_cut)
+                                     fenv_sample_cut=fenv_sample_cut,
+                                     forward_backward=forward_backward,
+                                     t_start=t_start,
+                                     fixed_step_size=fixed_step_size)
 
             df.to_csv(path, index=None)
             self.has_evolved = True  # set evolved-flag to True
@@ -493,7 +519,10 @@ class Planet_ChRo16():
                                               planet_folder_id,
                                               relation_EUV="Linsky",
                                               mass_loss_calc="Elim",
-                                              fenv_sample_cut=False):
+                                              fenv_sample_cut=False,
+                                              forward_backward=False,
+                                              t_start=None,
+                                              fixed_step_size=False):
         """ This is the master-function which needs to be called to 
         evolve the planet and at the same time create all necessary 
         output files which contain useful data about initial params, 
@@ -513,7 +542,10 @@ class Planet_ChRo16():
                                          planet_folder_id,
                                          relation_EUV=relation_EUV,
                                          mass_loss_calc=mass_loss_calc,
-                                         fenv_sample_cut=fenv_sample_cut)
+                                         fenv_sample_cut=fenv_sample_cut,
+                                         forward_backward=forward_backward,
+                                         t_start=t_start,
+                                         fixed_step_size=fixed_step_size)
         
         # create file with final planet params
         self.write_final_params_to_file(results_df, path_for_saving)
@@ -535,5 +567,82 @@ class Planet_ChRo16():
         else:
             print("Planet has not been evolved & no result file exists.")
 
-    def evolve_backwards(self):
-        raise NotImplementedError("Coming soon! :)")
+        
+    def evolve_backward(self,
+                       t_final,
+                       initial_step_size,
+                       epsilon, K_on, beta_settings,
+                       evo_track_dict,
+                       path_for_saving,
+                       planet_folder_id,
+                       relation_EUV="Linsky",
+                       mass_loss_calc="Elim",
+                       fenv_sample_cut=False,
+                       fixed_step_size=False):
+        """ Call this function to make the planet evolve and 
+        create file with mass and radius evolution.
+        See Mass_evolution_function.py for details on the integration."""
+
+        path = os.path.join(path_for_saving, self.planet_id + ".txt")
+        if os.path.exists(path):
+            # planet already exists
+            self.has_evolved = True
+            df = pd.read_csv(path)
+        else:
+            #print("Planet: ", self.planet_id+".txt")
+            # call mass_planet_RK4_forward_LO14 to start the integration
+            df = mass_evo_RK4_backwards(self,
+                                     evo_track_dict,
+                                     mass_loss_calc,
+                                     epsilon=epsilon,
+                                     K_on=K_on,
+                                     beta_settings=beta_settings,
+                                     initial_step_size=initial_step_size,
+                                     t_final=t_final,
+                                     relation_EUV=relation_EUV,
+                                     fenv_sample_cut=fenv_sample_cut,
+                                     fixed_step_size=fixed_step_size)
+
+            df.to_csv(path, index=None)
+            self.has_evolved = True  # set evolved-flag to True
+            
+        return df
+    
+
+    def evolve_backward_and_create_full_output(self,
+                                              t_final,
+                                              initial_step_size,
+                                              epsilon,
+                                              K_on,
+                                              beta_settings,
+                                              evo_track_dict,
+                                              path_for_saving,
+                                              planet_folder_id,
+                                              relation_EUV="Linsky",
+                                              mass_loss_calc="Elim",
+                                              fenv_sample_cut=False,
+                                              fixed_step_size=False):
+        """ This is the master-function which needs to be called to 
+        evolve the planet and at the same time create all necessary 
+        output files which contain useful data about initial params, 
+        host star params, tracks etc..."""
+        
+        # create planet id for file names
+        self.generate_planet_id(t_final, planet_folder_id, evo_track_dict)
+        # create file with initial planet, host star and track params
+        self.write_general_params_to_file(path_for_saving,
+                                          planet_folder_id,
+                                          evo_track_dict)
+        
+        results_df = self.evolve_backward(t_final, initial_step_size,
+                                         epsilon, K_on, beta_settings,
+                                         evo_track_dict,
+                                         path_for_saving,
+                                         planet_folder_id,
+                                         relation_EUV=relation_EUV,
+                                         mass_loss_calc=mass_loss_calc,
+                                         fenv_sample_cut=fenv_sample_cut,
+                                         fixed_step_size=fixed_step_size)
+        
+        # create file with final planet params
+        self.write_final_params_to_file(results_df, path_for_saving)

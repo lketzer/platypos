@@ -22,6 +22,18 @@ def calculate_core_radius(M_core, rock_or_ice="rock"):
         return 0.97 * M_core**0.28 # in R_earth
     elif rock_or_ice == "ice":
         return 1.27 * M_core**0.27 # in R_earth
+    
+def calculate_core_mass_given_core_radius(R_core, rock_or_ice="rock"):
+    """ M-R relation for rock/iron Earth-like or icy core (no envelope).
+    See Chen & Rogers (2016) for details. 
+    Parameters:
+    M_core (float): core mass in Earth masses
+    rock_or_ice (str): 'rock' (default) or 'ice'
+    """
+    if rock_or_ice == "rock":
+        return (R_core / 0.97)**(1/0.28) # in M_earth
+    elif rock_or_ice == "ice":
+        return (R_core / 1.27)**(1/0.27) # in M_earth
 
 
 def calculate_R_env(M_core, fenv, F_p, age, rock_or_ice="rock"):

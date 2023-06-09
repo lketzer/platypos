@@ -4,6 +4,7 @@ from astropy import constants as const
 import scipy.optimize as optimize
 from scipy.optimize import fsolve
 from scipy import interpolate
+import copy
 from platypos.mass_luminosity_relation import mass_lum_relation_mamajek
 from platypos.mass_luminosity_relation import mass_lum_relation_thomas
 
@@ -76,7 +77,7 @@ def lx_evo(t, track_dict):
     
     # read in the parameters from the provided dictionary
     # -> these are all the parameters required to define the tracks
-    t_start, t_sat=  track_dict["t_start"], track_dict["t_sat"]
+    t_start, t_sat = track_dict["t_start"], track_dict["t_sat"]
     t_curr, t_5Gyr = track_dict["t_curr"], track_dict["t_5Gyr"]
     Lx_max = track_dict["Lx_max"]
     Lx_curr, Lx_5Gyr = track_dict["Lx_curr"], track_dict["Lx_5Gyr"]
@@ -117,7 +118,7 @@ def lx_evo(t, track_dict):
     elif t_curr > t_start:
         # dt_drop==0 means we create a track with only the saturation regime
         # and a single power-law-slope drop to the converging Lx at t_curr
-        if dt_drop==0: # then t_sat == t_drop
+        if dt_drop == 0: # then t_sat == t_drop
             if t_start >= t_sat: # then t_sat <= t_start < t_curr
                 if t >= t_sat: #and t <= t_curr:
                     # only data in power law regime
@@ -143,7 +144,9 @@ def lx_evo(t, track_dict):
             
             if t <= t_sat:
                 Lx = Lx_max
+#                 print('0')
             elif (t > t_sat) and (t <= t_drop): # first of the two slopes
+#                 print('1')
                 alpha_drop1 = (np.log10((Lx_max / Lx_drop_factor) / Lx_max)) \
                 			  / (np.log10(t_drop / t_sat))
                 k_drop1 = 10**(np.log10(Lx_max) - alpha_drop1 \
@@ -151,12 +154,88 @@ def lx_evo(t, track_dict):
                 Lx = powerlaw(t, k_drop1, alpha_drop1)
                 
             elif t > t_drop:
+#                 print('2')
                 alpha_drop2 = (np.log10(Lx_curr / (Lx_max / Lx_drop_factor))) \
                 			   / (np.log10(t_curr / t_drop))
                 k_drop2 = 10**(np.log10((Lx_max / Lx_drop_factor)) \
                 			   - alpha_drop2 * np.log10(t_drop))
                 Lx = powerlaw(t, k_drop2, alpha_drop2)     
-    return Lx
+        return Lx
+
+
+def lx_evo_ext(t, track_dict, forward_backward=False):
+    """ new version of lx_evo, which uses lx_evo()
+    to calculate - if desired - not just a FUTURE track
+    but also a PAST track. 
+    
+    THIS IS THE MESSIEST FUNCTION. SORRY!
+    
+    WRITE DOCUMENTATION!
+    """
+    
+    if forward_backward is True:
+        # use specific input to calculate the FUTURE track
+
+        t_sat, Lx_sat = track_dict["t_sat"], track_dict["Lx_max"]
+        t_star = track_dict["t_start"]
+        t1Gyr, t5Gyr = track_dict["t_curr"], track_dict["t_5Gyr"]
+        Lx_1Gyr, Lx_5Gyr = track_dict["Lx_curr"], track_dict["Lx_5Gyr"]
+        
+        # Define function for calculating a power law
+        powerlaw = lambda x, k, index: k * (x**index)
+
+        if t < t_sat: # saturated regime
+            Lx = Lx_sat
+
+        elif (t >= t_sat) and (t < t_star): # drop-down regime
+            dt_drop = track_dict["dt_drop"]
+            try:
+                Lx_star = track_dict["Lx_star"] 
+            except:
+                pass
+
+            t0, t1, t2, t3, t4 = t_sat, t_sat + dt_drop, t_star, t1Gyr, t5Gyr
+            L0, L2, L3, L4 = Lx_sat, Lx_star, Lx_1Gyr, Lx_5Gyr 
+
+            if dt_drop == 0.:
+                # 
+                alpha = (np.log10(L2 / L0)) / ( np.log10(t2 / t0))
+                k = 10**(np.log10(L0) - alpha * np.log10(t0))
+                Lx = powerlaw(t, k, alpha)
+
+            else:
+                if (t < t_sat + dt_drop):
+                    Lx_drop_factor = track_dict["Lx_drop_factor"]
+                    alpha = (np.log10(L3 / L2)) / ( np.log10(t3 / t2))
+                    k = 10**(np.log10(L2) - alpha * np.log10(t2))
+                    L1 = powerlaw(t1, k, alpha)
+
+                    alpha = (np.log10((L1/Lx_drop_factor) / L0)) / ( np.log10(t1 / t0))
+                    k = 10**(np.log10(L0) - alpha * np.log10(t0))
+                    Lx = powerlaw(t, k, alpha)  
+
+                else: # (t >= t_sat + dt_drop)
+                    Lx_drop_factor = track_dict["Lx_drop_factor"]
+                    alpha = (np.log10(L3 / L2)) / ( np.log10(t3 / t2))
+                    k = 10**(np.log10(L2) - alpha * np.log10(t2))
+                    L1 = powerlaw(t1, k, alpha)
+
+                    alpha = (np.log10((L2) / (L1/Lx_drop_factor))) / ( np.log10(t2 / t1))
+                    k = 10**(np.log10((L1/Lx_drop_factor)) - alpha * np.log10(t1))
+                    Lx = powerlaw(t, k, alpha)  
+                    
+        else: #if t >= t_star: 
+            track_dict_copy = copy.deepcopy(track_dict)
+            track_dict_copy['dt_drop'] = 0
+            track_dict_copy['Lx_drop_factor'] = 1.0
+            track_dict_copy['Lx_max'] = track_dict["Lx_star"]  
+            track_dict_copy['t_sat'] = track_dict["t_start"]  
+            Lx = lx_evo(t, track_dict_copy)
+        
+        return Lx
+        
+    else:
+        return lx_evo(t, track_dict)
 
 def flux_at_planet_earth(L, a_p):
     """Function calculates the flux that the planet recieves at a given 

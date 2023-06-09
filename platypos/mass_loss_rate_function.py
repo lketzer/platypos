@@ -8,7 +8,7 @@ import platypos.planet_models_ChRo16 as plmoChRo16
 import platypos.planet_model_Ot20 as plmoOt20
 import platypos.beta_K_functions as bk
 
-from platypos.lx_evo_and_flux import lx_evo, l_xuv_all
+from platypos.lx_evo_and_flux import lx_evo, l_xuv_all, lx_evo_ext
 from platypos.lx_evo_and_flux import flux_at_planet_earth, flux_at_planet
 
 
@@ -20,7 +20,8 @@ def mass_loss_rate(t_,
                    beta_settings={"beta_calc": "off"},
                    f_env=None,
                    radius_at_t_=None,
-                   relation_EUV="Linsky"):
+                   relation_EUV="Linsky",
+                   forward_backward=False):
     """ 
     Calculate the XUV-induced mass-loss rate at any given time step
     (of the integration) using
@@ -87,7 +88,11 @@ def mass_loss_rate(t_,
 
     # calculate X-ray luminosity and planet flux at time t_
     if isinstance(track_dict, Mapping):
-        Lx = lx_evo(t=t_, track_dict=track_dict)
+        if forward_backward is True:
+            Lx = lx_evo_ext(t=t_, track_dict=track_dict,
+                            forward_backward=True)
+        else:
+            Lx = lx_evo(t=t_, track_dict=track_dict)
     else:
         Lx = track_dict # a single Lx value at t_ is passed (stored in var track_dict)
     
