@@ -7,7 +7,7 @@ Tool to estimate the atmospheric mass loss of planets induced by stellar X-ray a
 
 ## Installation
 
-**NOTE: 'pip install platypos' installs an old version. Better to clone and use the *platypos_newest_release* branch for now!** <br> 
+**NOTE: 'pip install platypos' installs an old version. Better to clone and use the *version090623* branch for now!** <br> 
 Also, if you want to use it and something doesn't work or you have questions, simply write me an e-mail (lketzer@aip.de) <br>
 Add-on: git clone multitrack and look at the example on how to easily evolve a set of planets in Test_platypos_and_multi_track.ipynb
 
